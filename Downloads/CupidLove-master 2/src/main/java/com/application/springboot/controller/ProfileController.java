@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.*;
 import com.application.springboot.model.AboutMe;
 import com.application.springboot.model.Photos;
 import com.application.springboot.model.User;
+import com.application.springboot.model.Visits;
 import com.application.springboot.model.notification.Notification;
 import com.application.springboot.repository.AboutMeRepository;
 import com.application.springboot.repository.UserRepository;
@@ -53,6 +54,8 @@ public class ProfileController {
     private NotificationService notificationService;
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private VisitService visitService;
     /*
     Working correctly ,
     Repo:-
@@ -73,12 +76,19 @@ public class ProfileController {
         notification.setUserReceiver(user.getEmail());
         notification.setDatetime_added(new Date());
         notification.setUser(currentloginInformation);
-
         model.addAttribute("userSender",currentloginInformation);
 
         //gets the logged in user photo
         model.addAttribute("userPhoto",photoService.showAllPhotos(user));
 
+        User visitedUsers =  userService.findByUsername(username);
+
+
+        Visits visits = new Visits();
+        visits.setStatus(true);
+        visits.setVisitedUser(visitedUsers);
+        visits.setReceivedUser(currentloginInformation);
+        visitService.saveVisits(visits);
 
         notification.setMessage(currentloginInformation.getUsername() + " "+ "has visited your profile");
 
@@ -117,8 +127,6 @@ public class ProfileController {
         User existingUser = userService.findExistingEmail(principal.getName());
         model.addAttribute("totalPhotos",photoService.countAllPhotos(existingUser));
         model.addAttribute("userPhoto",photoService.showAllPhotos(existingUser)) ;
-        System.out.println("-------------------------");
-        System.out.println(photoService.showAllPhotos(existingUser));
         model.addAttribute("users", existingUser);
         model.addAttribute("totalViews",notificationService.getTotalProfileViews(principal.getName()));
     return "profile";

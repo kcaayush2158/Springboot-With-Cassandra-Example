@@ -1,4 +1,4 @@
-package com.application.springboot.model.like;
+package com.application.springboot.model;
 
 import com.application.springboot.model.User;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Data
 @Getter
 @Setter
-@Data
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +18,7 @@ public class Like {
     private User likedBy;
     @ManyToOne
     private User likedTo;
+
     private boolean status;
 
 }

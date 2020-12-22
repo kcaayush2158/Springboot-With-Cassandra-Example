@@ -1,7 +1,7 @@
 package com.application.springboot.controller.like;
 
 import com.application.springboot.model.User;
-import com.application.springboot.model.like.Like;
+import com.application.springboot.model.Like;
 import com.application.springboot.service.LikeService.LikeService;
 import com.application.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1")
 public class LikeRestApiController {
 
     @Autowired
@@ -37,10 +37,24 @@ public class LikeRestApiController {
 
 
     @GetMapping("/likes/users/count")
-    public Like countTotalVisitedUsers(Principal principal){
+    public int countTotalVisitedUsers(Principal principal){
         User user = userService.findExistingEmail(principal.getName());
         return likeService.countTotalLikes(user);
     }
+
+    @PostMapping("/likes/{id}/update")
+    public Like updatesLikeStatus(@RequestBody Like like , @PathVariable("id") int id, Principal principal){
+        User user = userService.findExistingEmail(principal.getName());
+        like.setLikedBy(user);
+        like.setLikedTo(like.getLikedTo());
+        if(like.isStatus()){
+            like.setStatus(false);
+            return likeService.updateLike(like.getId(),false);
+        }else {
+            like.setStatus(true);
+        }
+        return likeService.updateLike(like.getId(),true);
+}
 
 
 

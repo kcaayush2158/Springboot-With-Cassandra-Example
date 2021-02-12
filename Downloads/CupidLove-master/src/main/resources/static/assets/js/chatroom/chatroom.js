@@ -210,19 +210,19 @@ Settings <i class="fa fa-gear"></i>
          </div>
          
          <div class="modal-body">
-            <form action="/api/chatroom/` + data[i].chatRoomId + `/update" id="form-room-` + i + `" method="POST">
+            <form action="/api/chatroom/` + data[i].chatRoomId + `/update" id="form-room-`+ i + `" method="POST">
                <h6 th:text="'Created Date :'` + data[i].createdTime + `"> </h6>
                <div class="form-group">
                   <label for="my-public-chat-room-name">Room Name : </label>
-                  <input type="text" class="form-control" name="chatRoomName" id="my-public-chat-room-name-` + i + `" value="` + data[i].chatRoomName + `" >
+                  <input type="text" class="form-control " required name="chatRoomName" id="my-public-chat-room-name-` + i + `" value="` + data[i].chatRoomName + `" >
                </div>
                <div class="form-group">
                   <label for="my-public-chat-room-description">Room Description :</label>
-                  <textarea class="form-control" name="roomDescription" id="my-public-chat-room-description` + i + `"  >` + data[i].chatRoomDescription + `</textarea>
+                  <textarea class="form-control" name="roomDescription" required id="my-public-chat-room-description` + i + `"  >` + data[i].chatRoomDescription + `</textarea>
                </div>
                <div class="form-group">
                   <label for="my-public-room-type">Room Type :</label>
-                  <select class="form-control" name="roomType" id="my-public-chat-room-type-` + i + `">
+                  <select class="form-control" required name="roomType" id="my-public-chat-room-type-` + i + `">
                      <div th:if="` + data[i].type + ` == 'PRIVATE'}">
                         <option value="` + data[i].type + `" selected >` + data[i].type + `</option>
                         <option value="PRIVATE"  >PRIVATE</option>
@@ -231,7 +231,7 @@ Settings <i class="fa fa-gear"></i>
                </div>
                <div class="form-group" id="my-public-form-group-password-`+i+ `">
                   <label for="password">Password :</label>
-                  <input type="password" class="form-control" name="password" autocomplete id="my-public-chat-room-password-`+i+`">
+                  <input type="password" required class="form-control" name="password" autocomplete id="my-public-chat-room-password-`+i+`">
                </div>
               <button class="btn btn-primary btn-block " type="submit"><i class="fa fa-save"></i> Save</button>
               </form>
@@ -279,7 +279,7 @@ Settings <i class="fa fa-gear"></i>
             <form action="/chatroom/private/` + data[i].chatRoomId + `" method="POST">
                <div class="form-group">
                   <label for="password-chatroom">Password :</label>
-                  <input type="password" class="form-control" id="password-chatroom-` + i + `" autocomplete name="password-chatroom"/>
+                  <input type="password"  required class="form-control" id="password-chatroom-` + i + `" autocomplete name="password-chatroom"/>
                   <button type="submit" class="btn btn-block btn-secondary mt-5" ><i class="fa fa-save"></i>  Save changes</button>
                </div>
             </form>
@@ -308,15 +308,15 @@ Settings <i class="fa fa-gear"></i>
                <h6 th:text="'Created Date :'` + data[i].createdTime + `"> </h6>
                <div class="form-group">
                   <label for="my-private-chat-room-name">Room Name : </label>
-                  <input type="text" class="form-control" name="chatRoomName" id="my-private-chat-room-name-` + i + `" value="` + data[i].chatRoomName + `" >
+                  <input type="text" class="form-control" required name="chatRoomName" id="my-private-chat-room-name-` + i + `" value="` + data[i].chatRoomName + `" >
                </div>
                <div class="form-group">
                   <label for="my-private-chat-room-description">Room Description :</label>
-                  <textarea class="form-control" name="roomDescription" id="my-private-chat-room-description-` + i + `"  >` + data[i].chatRoomDescription + `</textarea>
+                  <textarea class="form-control" required name="roomDescription" id="my-private-chat-room-description-` + i + `"  >` + data[i].chatRoomDescription + `</textarea>
                </div>
                <div class="form-group">
                   <label for="my-private-chat-room-type">Room Type :</label>
-                  <select class="form-control" name="roomType" id="my-private-chat-room-type-` + i + `">
+                  <select class="form-control" required name="roomType" id="my-private-chat-room-type-` + i + `">
                      <div th:if="` + data[i].type + ` == 'PRIVATE'}">
                         <option value="` + data[i].type + `"   >` + data[i].type + `</option>
                         <option value="PUBLIC"  selected >PUBLIC</option>
@@ -326,7 +326,7 @@ Settings <i class="fa fa-gear"></i>
                </div>
                <div class="form-group" id="my-private-form-group-password-` + i + `">
                   <label for="my-private-chat-room-password-` + i + `">Password :</label>
-                  <input type="password" class="form-control" autocomplete name="password" id="my-private-chat-room-password-` + i + `" >
+                  <input type="password" class="form-control" required autocomplete name="password" id="my-private-chat-room-password-` + i + `" >
                </div>
              <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-save"></i> Save</button>
              
@@ -375,6 +375,8 @@ Settings <i class="fa fa-gear"></i>
                         responses += result.concat(res);
                         $('#myChatRoom').html(responses);
                         $('#broadcast').text(data.length);
+                        $('#form-room-'+i).parsley();
+                        $('#my-private-form-room-'+i).parsley();
 
 
                         const privatePasswordChatRoomForm = $('#my-private-form-group-password-' + i);

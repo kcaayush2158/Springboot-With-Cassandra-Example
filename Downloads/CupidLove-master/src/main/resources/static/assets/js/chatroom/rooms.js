@@ -13,7 +13,7 @@ $(document).ready(function () {
                 success: function () {
                     var response = `
                       <div class="alert alert-danger" role="alert"  data-dismiss="alert">
-                         <strong>Success</strong> <i class="fa fa-times-circle"></i> <i class="fa fa-check-circle"></i> Room has been created Successfully
+                         <strong><i class="fa fa-check-circle"></i> Success</strong> <i class="fa fa-times-circle"></i> <i class="fa fa-check-circle"></i> Room has been created Successfully
                       </div>
                   `;
                     $("#response-message").html(response);
@@ -21,7 +21,7 @@ $(document).ready(function () {
                 error: function (data) {
                     var response = `
                       <div class="alert alert-danger" role="alert"  data-dismiss="alert">
-                         <strong>Failed</strong> <i class="fa fa-times-circle"></i> Room is already existed
+                         <strong><i class="fa fa-remove"></i> Failed</strong> <i class="fa fa-times-circle"></i> Room is already existed
                       </div>
                   `;
                     $("#response-message").html(response);

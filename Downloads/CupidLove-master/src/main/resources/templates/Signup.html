@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="http://parsleyjs.org/src/parsley.css" />
     <link rel="stylesheet" th:href="@{/assets/css/signup.css}" type="text/css" href="/assets/css/signup.css" media="all" >
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link th:href="@{/assets/css/navbar.css}" href="/assets/css/navbar.css" type="text/css" media="all" rel="stylesheet" />
@@ -22,21 +23,23 @@
         <hr class="col-lg-5 mb-4">
     </h2>
 
-    <div role="alert" th:if="${error}">
-        <div class="alert alert-primary" th:text="${error}"  role="alert">
+    <div  th:if="${error}">
+        <div class="alert alert-danger" th:text="${error}"  role="alert">
         </div>
     </div>
     <br><br>
     <!--/*@thymesVar id="userRegistration" type="com.application.springboot.model.UserRegistration      "*/-->
-    <form method="POST"  th:action="@{/signup}" novalidate id="main" >
+    <form method="POST"  th:action="@{/signup}" data-parsley-validate id="demo-form"  >
 
         <div class="form-group">
             <div class="row">
+
                 <div class="col-lg-6">
+
                     <!--  ===============================================First Name input field ========================================-->
                     <div class="form-group">
                         <label for="firstName">First Name: </label>
-                        <input name="firstName"  type="text" id="firstName" class="form-control mb-2 form-control-lg"  />
+                        <input name="firstName"  type="text" id="firstName" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
                         <div class="col-sm-5 messages"></div>
 <!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid First Name</div>-->
                     </div>
@@ -44,14 +47,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="lastName">Last Name: </label>
-                        <input name="lastName"   id="lastName" type="text" class="form-control mb-2 form-control-lg"  />
+                        <input name="lastName"   id="lastName" type="text" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
                         <div class="col-sm-5 messages"></div>
 <!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Last Name</div>-->
 
                     </div>
                 </div>
             </div>
-        </div>
+
 
         <div class="form-group">
             <label for="username">Username: </label>
@@ -62,7 +65,7 @@
         <!--  ===============================================Email field ========================================-->
         <div class="form-group">
             <label for="email">Email: </label>
-            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
+            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-parsley-trigger="change" required=""  name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Email</div>-->
             <div class="col-sm-5 messages"></div>
         </div>
@@ -70,13 +73,16 @@
                 <div class="form-group">
                     <div class="form-group">
                         <label for="password">Password: </label>
-                        <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$"  name="password" id="password" type="password" class="form-control mb-2 form-control-lg" />
+                        <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$"  name="password" id="password" type="password" class="form-control mb-2 form-control-lg" required />
 <!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Password</div>-->
                         <div class="col-sm-5 messages"></div>
                     </div>
                 </div>
-            <hr class="mt-2">
 
+        </div>
+
+            <hr class="mt-2">
+<div class="second">
         <h2 class="text-center" style="font-size:33px;">
             <strong>Basic Information</strong>
             <hr class="col-lg-5 mb-4">
@@ -84,36 +90,33 @@
 
         <div class="form-group">
             <label for="age">Age</label>
-            <select name="age" id="age"   class="form-control">
+            <select name="age" id="age"   class="form-control" required>
                 <th:block th:each="i : ${#numbers.sequence( 18, 80)}">
                     <option th:value="${i}" th:text="${i}"></option>
                 </th:block>
             </select>
-            <div class="col-sm-5 messages"></div>
-            <div class="col-sm-5 messages"></div>
+
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.age')}" th:errors="*{aboutMe.age}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Age</div>-->
         </div>
         <div class="form-group">
             <label for="liveIn">Which city do you live ??</label>
-            <input type="text" name="liveIn" id="liveIn"  class="form-control">
-            <div class="col-sm-5 messages"></div>
-            <div class="col-sm-5 messages"></div>
+            <input type="text" name="liveIn" id="liveIn" data-parsley-length="[4, 20]"  class="form-control" required>
+
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.liveIn')}" th:errors="*{aboutMe.liveIn}"  role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Live In</div>-->
 
         </div>
         <div class="form-group">
             <label for="gender">What is your Gender ? </label>
-            <select class="form-control" name="gender"   id="gender">
+            <select class="form-control" name="gender"  required id="gender">
                 <option th:value="Male" value="Male">Male</option>
                 <option th:value="Female" value="Female">Female</option>
             </select>
-            <div class="col-sm-5 messages"></div>
-            <div class="col-sm-5 messages"></div>
+
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.gender')}" th:errors="*{aboutMe.gender}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Genders</div>-->
         </div>
         <div class="form-group">
             <label for="education">What is your Education Level?</label>
-            <select class="form-control" name="education" id="education">
+            <select class="form-control" name="education" required id="education">
                 <option value="" selected ></option>
                 <option value="High School">High School</option>
                 <option value="College">College</option>
@@ -129,7 +132,7 @@
         </div>
         <div class="form-group">
             <label for="country">What is your Country Name ? </label>
-            <select class="form-control" id="country"  name="country">
+            <select class="form-control" id="country" required name="country">
                 <option value="" selected ></option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Albania">Albania</option>
@@ -384,13 +387,13 @@
         </div>
         <div class="form-group">
             <label for="interests">Interests</label>
-            <textarea class="form-control" name="interests" id="interests"> </textarea>
+            <textarea class="form-control" name="interests" required id="interests"> </textarea>
             <div class="col-sm-5 messages"></div>
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.interests')}" th:errors="*{aboutMe.interests}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Interests</div>-->
         </div>
         <div class="form-group">
             <label for="bio">Bio</label>
-            <textarea class="form-control"  name="bio" id="bio"> </textarea>
+            <textarea class="form-control"  name="bio" required id="bio"> </textarea>
             <div class="col-sm-5 messages"></div>
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.bio')}" th:errors="*{aboutMe.bio}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Bio</div>-->
         </div>
@@ -402,7 +405,7 @@
         </h2>
             <div class="form-group">
                 <label for="bodyType ">What is your body type ?</label>
-                <select class="form-control"  name="bodyType" id="bodyType ">
+                <select class="form-control"  required name="bodyType" id="bodyType ">
                     <option value="" id="bodyType" selected></option>
                     <option value="Average">Average</option>
                     <option value="Curvy">Curvy</option>
@@ -415,7 +418,7 @@
             </div>
             <div class="form-group">
                 <label for="height">What is your height ?</label>
-                <select class="form-control autofill"  name="height" id="height" tabindex="2">
+                <select class="form-control autofill" required name="height" id="height" tabindex="2">
                     <option  value="" selected></option>
                     <option value="91">3'</option>
                     <option value="94">3'1"</option>
@@ -482,7 +485,7 @@
             </div>
             <div class="form-group">
                 <label for="eye">What is your eye colour ?</label>
-                <select class="form-control autofill"  name="eyes" tabindex="2" id="eye">
+                <select class="form-control autofill" required  name="eyes" tabindex="2" id="eye">
                     <option value=" " selected></option>
                     <option th:value="'blue'" value="blue">Blue</option>
                     <option th:value="'brown'" value="brown">Brown</option>
@@ -496,7 +499,7 @@
             </div>
             <div class="form-group">
                 <label for="hair">What is your hair color?</label>
-                <select class="form-control autofill"   name="hair" id="hair" tabindex="2">
+                <select class="form-control autofill"  required name="hair" id="hair" tabindex="2">
                     <option   value="" selected></option>
                     <option value="black">Black</option>
                     <option value="blond">Blond</option>
@@ -517,7 +520,7 @@
         </h2>
             <div class="form-group">
                 <label for="languages">Which Language do you know?</label>
-                <select class="form-control"  name="languages" id="languages">
+                <select class="form-control" required  name="languages" id="languages">
                     <option value="" selected></option>
                     <option value="Afrikaans">Afrikaans</option>
                     <option value="Albanian">Albanian</option>
@@ -598,7 +601,7 @@
             </div>
             <div class="form-group">
                 <label for="relationship">What is your relationship Status?</label>
-                <select class="form-control"   name="relationship" id="relationship">
+                <select class="form-control"  required name="relationship" id="relationship">
                     <option value="" selected></option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
@@ -613,14 +616,14 @@
             </div>
             <div class="form-group">
                 <label for="known">Known</label>
-                <input type="text" name="known" id="known"  class="form-control">
+                <input type="text" name="known" required id="known"  class="form-control">
                 <div class="col-sm-5 messages"></div>
 <!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.known')}" th:errors="*{aboutMe.known}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Known</div>-->
 
             </div>
             <div class="form-group">
                 <label for="workAs">What is your Occupation ?</label>
-                <select class="form-control" name="workAs" id="workAs">
+                <select class="form-control" name="workAs" required id="workAs">
                     <option  value="" selected></option>
                     <option value="Administrative / Secretarial / Clerical">Administrative / Secretarial / Clerical</option>
                     <option value="Advertising / Media">Advertising / Media</option>
@@ -662,12 +665,12 @@
             </div>
             <div class="form-group">
                 <label for="lookingFor" >Looking For?</label>
-                <textarea class="form-control" name="lookingFor" id="lookingFor" minlength="" maxlength="255" rows="5"   selected></textarea>
+                <textarea class="form-control" required name="lookingFor" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold="10" id="lookingFor" minlength="" maxlength="255" rows="5"   selected></textarea>
 <!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.lookingFor')}" th:errors="*{aboutMe.lookingFor}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Looking For</div>-->
             </div>
             <div class="form-group">
                 <label for="haveKids">Do you have kids?</label>
-                <select class="form-control"  name="haveKids" id="haveKids">
+                <select class="form-control" required  name="haveKids" id="haveKids">
                     <option value=""  selected></option>
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -680,7 +683,7 @@
             </div>
             <div class="form-group">
                 <label for="smoke">Do you smoke ?</label>
-                <select class="form-control"  name="smoke" id="smoke">
+                <select class="form-control" required  name="smoke" id="smoke">
                     <option value="" selected ></option>
                     <option value="Never">Never</option>
                     <option value="Occasionally">Occasionally</option>
@@ -694,7 +697,7 @@
             </div>
             <div class="form-group">
                 <label for="drink">Do you Drink ?</label>
-                <select class="form-control" name="drink" id="drink">
+                <select class="form-control" required name="drink" id="drink">
                     <option value="" selected></option>
                     <option value="Never">Never</option>
                     <option value="Occasionally">Occasionally</option>
@@ -704,8 +707,12 @@
 <!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.drink')}" th:errors="*{aboutMe.drink}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Drinks</div>-->
 
             </div>
+</div>
         <button class="btn btn-block btn-lg btn-success form-control-lg form-control mb-5 mt-5" type="submit">Sign Up</button>
     </form>
+
+
+
 </div>
 
         <!--  =============================================== Form submit button  field ========================================-->
@@ -720,169 +727,29 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous">
 
-
-    var constraints = {
-        username: {
-            presence: true,
-            exclusion: {
-                within: ["nicklas"],
-                message: "'%{value}' is not allowed"
-            },
-            length:{
-                length:{
-                    minimum: 6,
-                    message:"Must be atleast  6 characters"
-                }
+    $(function () {
+        Parsley.addValidator('checkChildren', {
+            messages: {en: 'You must correctly fill at least one of these blocks!'},
+            requirementType: 'integer',
+            validate: function(_value, requirement, instance) {
+                for(var i = 1; i <= requirement; i++)
+                    if (instance.parent.isValid({group: 'block-' + i, force: true}))
+                        return true; // One section is filled, this check is valid
+                return false; // No section is filled, this validation fails
             }
-        },
-        email: {
-            // Email is required
-            presence: true,
-            // and must be an email (duh)
-            email: true
-        },
-        password: {
-            // Password is also required
-            presence: true,
-            // And must be at least 5 characters long
-            length: {
-                minimum: 5
-            }
-        },
-
-        firstName: {
-            // Password is also required
-            presence: true,
-            // And must be at least 5 characters long
-            length: {
-                minimum: 2
-            }
-        },
-
-        lastName: {
-            // Password is also required
-            presence: true,
-            // And must be at least 5 characters long
-            length: {
-                minimum: 2
-            }
-        },
-        username: {
-            // You need to pick a username too
-            presence: true,
-            // And it must be between 3 and 20 characters long
-            length: {
-                minimum: 3,
-                maximum: 20
-            },
-
-            format: {
-                // We don't allow anything that a-z and 0-9
-                pattern: "[a-z0-9]+",
-                // but we don't care if the username is uppercase or lowercase
-                flags: "i",
-                message: "can only contain a-z and 0-9"
-            },
-
-        },
-
-        "confirm-password": {
-            // You need to confirm your password
-            presence: true,
-            // and it needs to be equal to the other password
-            equality: "password"
-        },
-    };
-
-
-    document.querySelector("form#main")
-        .addEventListener("submit", function(ev) {
-            ev.preventDefault();
-            handleFormSubmit(this);
         });
 
-    function handleFormSubmit(form) {
-        // First we gather the values from the form
-        var values = validate.collectFormValues(form);
-        // then we validate them against the constraints
-        var errors = validate(values, constraints);
-        // then we update the form to reflect the results
-        showErrors(form, errors || {});
-        // And if all constraints pass we let the user know
-        if (!errors) {
-            showSuccess();
-        }
-    }
-
-    // Updates the inputs with the validation errors
-    function showErrors(form, errors) {
-        // We loop through all the inputs and show the errors for that input
-        _.each(form.querySelectorAll("input[name], select[name]"), function(input) {
-            // Since the errors can be null if no errors were found we need to handle
-            // that
-            showErrorsForInput(input, errors && errors[input.name]);
+        Parsley.on('form:submit', function() {
+            alert("The form would be submitted at this point. " +
+                "For this demo, we interrupt the processing.");
+            return false; // Don't submit for this demo
         });
-    }
-    // Shows the errors for a specific input
-    function showErrorsForInput(input, errors) {
-        // This is the root of the input
-        var formGroup = closestParent(input.parentNode, "form-group")
-            // Find where the error messages will be insert into
-            , messages = formGroup.querySelector(".messages");
-        // First we remove any old messages and resets the classes
-        resetFormGroup(formGroup);
-        // If we have errors
-        if (errors) {
-            // we first mark the group has having errors
-            formGroup.classList.add("has-error");
-            // then we append all the errors
-            _.each(errors, function (error) {
-                addError(messages, error);
-            });
-        } else {
-            // otherwise we simply mark it as success
-            formGroup.classList.add("has-success");
-        }
-    }
 
-    // Recusively finds the closest parent that has the specified class
-    function closestParent(child, className) {
-        if (!child || child == document) {
-            return null;
-        }
-        if (child.classList.contains(className)) {
-            return child;
-        } else {
-            return closestParent(child.parentNode, className);
-        }
-    }
-
-    function resetFormGroup(formGroup) {
-        // Remove the success and error classes
-        formGroup.classList.remove("has-error");
-        formGroup.classList.remove("has-success");
-        // and remove any old messages
-        _.each(formGroup.querySelectorAll(".help-block.error"), function(el) {
-            el.parentNode.removeChild(el);
+        $('.demo-form').parsley({
+            inputs: Parsley.options.inputs + ',[data-parsley-check-children]'
         });
-    }
-
-    // Adds the specified error with the following markup
-    // <p class="help-block error">[message]</p>
-    function addError(messages, error) {
-        var block = document.createElement("p");
-        block.classList.add("help-block");
-        block.classList.add("error");
-        block.innerHTML = error;
-        messages.appendChild(block);
-    }
-
-    function showSuccess() {
-        // We made it \:D/
-        alert("Success!");
-    }
-
+    });
 </script>
 </html>

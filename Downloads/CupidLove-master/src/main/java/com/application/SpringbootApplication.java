@@ -15,11 +15,6 @@ public class SpringbootApplication {
 
         SpringApplication.run(SpringbootApplication.class, args);
 
-        Pusher pusher = new Pusher("942339", "fe6ae4d627b4ab84c8d9", "24772a863476b96756cc");
-        pusher.setCluster("ap2");
-        pusher.setEncrypted(true);
-
-        pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", "hello jsss"));
     }
 
 }

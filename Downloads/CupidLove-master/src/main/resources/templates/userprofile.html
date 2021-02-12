@@ -226,8 +226,7 @@
                                                     <td class="table-light" th:text="${'Not updated'}"></td>
                                                 </th:block>
                                                 <th:block th:if="${users.getAboutMe().getWorkAs() != null}">
-                                                    <td class="table-success"
-                                                        th:text="${users.getAboutMe().getWorkAs()}"></td>
+                                                    <td class="table-success"   th:text="${users.getAboutMe().getWorkAs()}"></td>
                                                 </th:block>
                                                 <div th:if="${users.getAboutMe().getWorkAs()} == ${currentUser.getAboutMe().getWorkAs()}">
                                                     <th:block th:if="${currentUser.getAboutMe().getWorkAs() == null}">

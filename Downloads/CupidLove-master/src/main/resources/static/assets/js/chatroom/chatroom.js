@@ -1,10 +1,10 @@
 $(document).ready(function() {
-   var clearConsole = function clearconsole() {
-        console.log(window.console);
-        if(window.console || window.console.firebug) {
-            console.clear();
-        }
-    }
+   // var clearConsole = function clearconsole() {
+   //      console.log(window.console);
+   //      if(window.console || window.console.firebug) {
+   //          console.clear();
+   //      }
+   //  }
     var createRoom = $('#form-room');
 
     createRoom.submit(function(e) {
@@ -187,9 +187,12 @@ $(document).ready(function() {
                                        <b> <i class="fa fa-plus-circle"></i> Join Room</b>
                                       </button>
                                   </form>
-                  <form action="/api/chatroom/` + data[i].chatRoomId + `/delete" method="POST" id="my-public-chat-room-form-delete"  >
-                    <button class="btn btn-danger btn-block" type="submit" ><i class="fa fa-trash"></i> Delete Room </button>
-                  </form>
+                        <form action="/api/chatroom/` + data[i].chatRoomId + `/delete" method="POST" id="my-public-chat-room-form-delete">
+                          <button class="btn btn-danger btn-block" type="submit"  ><i class="fa fa-trash"></i> Delete Room </button>
+                        
+                        </form>
+                            
+                    
                                   
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#modelSettings` + i + `">
@@ -250,6 +253,8 @@ Settings <i class="fa fa-gear"></i>
                           </div>
                             </div>
      `
+
+
 
                         } else {
                             res = `
@@ -347,9 +352,25 @@ Settings <i class="fa fa-gear"></i>
                         }
                         ``;
 
-
-
-
+                        const deletePublicChatRoom = $('#my-public-chat-room-form-delete');
+                        deletePublicChatRoom.submit(function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                url:deletePublicChatRoom.attr("url"),
+                                method:'POST',
+                                type:'json',
+                                data: deletePublicChatRoom.serialize(),
+                                success:function(){
+                                    pollAllChatRooms()
+                                    pollMyChatRooms()
+                                },
+                                error:function () {
+                                    alert("deleted");
+                                    pollAllChatRooms()
+                                    pollMyChatRooms()
+                                }
+                            });
+                        });
 
                         responses += result.concat(res);
                         $('#myChatRoom').html(responses);
@@ -401,27 +422,9 @@ Settings <i class="fa fa-gear"></i>
         }
     };
 
-    const deletePublicChatRoom = $('#my-public-chat-room-form-delete');
-    deletePublicChatRoom.on('submit',function (e) {
-        e.preventDefault();
 
-        $.ajax({
-            url:deletePublicChatRoom.attr("action"),
-            method:'POST',
-            type:'json',
-            success:function(){
-                pollAllChatRooms()
-                pollMyChatRooms()
-            },
-            error:function () {
-                alert("deleted");
-                pollAllChatRooms()
-                pollMyChatRooms()
-            }
-        })
 
-        alert("hello");
-    });
+
 
     const myFormPassword = $('#form-group-password');
     myFormPassword.hide();
@@ -435,6 +438,8 @@ Settings <i class="fa fa-gear"></i>
 
         }
     });
+
+
 
 
     // used for the searching the chatroom

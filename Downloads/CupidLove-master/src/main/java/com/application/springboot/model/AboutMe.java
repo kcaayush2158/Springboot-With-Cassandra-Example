@@ -30,7 +30,7 @@ public class AboutMe {
     private String known;
     @Lob
     private String lookingFor;
-    @NotEmpty(message = "Smoke cannot be empty")
+    @NotNull(message = "Smoke cannot be empty")
     private String smoke;
     @NotNull(message = "Drink cannot be empty")
     private String drink;
@@ -52,12 +52,12 @@ public class AboutMe {
     @Max(80)
     @NotNull(message = "Age cannot be empty")
     private int age;
-    @NotEmpty(message = "Bio cannot be empty")
+    @NotNull(message = "Bio cannot be empty")
     private String bio;
     @Lob
-    @NotEmpty(message = "Interests cannot be empty")
+    @NotNull(message = "Interests cannot be empty")
     private String interests;
-    @NotEmpty(message = "Country cannot be empty")
+    @NotNull(message = "Country cannot be empty")
     private String country;
 
 

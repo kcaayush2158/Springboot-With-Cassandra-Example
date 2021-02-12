@@ -17,6 +17,7 @@ public interface LikesRepository extends JpaRepository<Likes,Integer> {
     int countDistinctByLikedBy(User likedBy);
 
     List<Likes> findDistinctByLikedTo(User likedTo);
+
     List<Likes> findDistinctByLikedBy(User likedBy);
 
     Likes findByLikedToAndLikedBy(User likedTo, User likedBy);

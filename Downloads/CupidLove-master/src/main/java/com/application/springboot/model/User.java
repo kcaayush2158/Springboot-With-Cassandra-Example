@@ -25,19 +25,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty(message = "First Name is required")
+    @NotNull(message = "First Name is required")
     private String firstName;
-    @NotEmpty(message = "Last Name is required")
+    @NotNull(message = "Last Name is required")
     private String lastName;
     @Email(message = "Email is invalid")
-    @NotEmpty(message = "Email is invalid")
+    @NotNull(message = "Email is invalid")
     private String email;
     private boolean isActive;
     @Size(message = "Password length should be more than 6 characters",min = 6)
     private String password;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @Valid
     @NotNull
+    @Valid
     private AboutMe aboutMe;
 
     @NotNull(message = "Username cannot be empty")

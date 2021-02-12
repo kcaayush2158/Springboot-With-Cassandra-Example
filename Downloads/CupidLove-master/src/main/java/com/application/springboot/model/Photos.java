@@ -4,10 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
@@ -15,8 +13,11 @@ import javax.persistence.ManyToOne;
 @Data
 public class Photos {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @NotEmpty
     private String photoUrl;
+    @NotEmpty
     private String photoType;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private User principalName;

@@ -43,7 +43,6 @@ public class MainController {
 
     @GetMapping(value = "/")
     public String listAllPage(Model model, Principal principal, AboutMe aboutMe,User user, Authentication authentication) {
-
         if (principal != null) {
             model.addAttribute("userProfiles",userService.getAllUserProfile());
             model.addAttribute("aboutMe", aboutMe);

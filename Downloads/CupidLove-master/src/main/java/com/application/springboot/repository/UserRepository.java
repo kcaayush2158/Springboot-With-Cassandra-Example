@@ -1,17 +1,14 @@
 package com.application.springboot.repository;
 
-import com.application.springboot.model.AboutMe;
 import com.application.springboot.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +22,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     *
     * */
 
+    User findByEmailAndPassword(@Param("email")String email ,@Param("password")String password);
     @Transactional
     @Query(value="SELECT * from demo.user  u ORDER BY u.id DESC LIMIT :limit,:start" , nativeQuery=true)
     List<User> findAllTheUsersProfiles(@Param("start")int start, @Param("limit")int limit );
@@ -61,7 +59,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     @Modifying
     @Transactional
     @Query(value = "update User u set u.password = :password where u.email = :email")
-    void changeUserPassword(@RequestParam("password") String password, String email);
+    User changeUserPassword(@RequestParam("password") String password, String email);
 
 
 
@@ -107,5 +105,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     User findUserById(int id);
 
+
+  
 
 }

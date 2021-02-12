@@ -7,7 +7,38 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-
+<Style>
+    #user-bio{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        color: #222;
+        min-height: 100px;
+        max-height: 100px;
+    }
+    #navbar{
+        background-color: white;
+    }
+    .card{
+        max-width: 16rem;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.08);
+        border-radius: 10px;
+        overflow: hidden;
+        text-decoration: none;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+    .card-body{
+        background-color: white;
+    }
+    .card-title{
+        font-size: 18px;
+        font-weight: 700;
+        color: #222;
+    }
+</Style>
 <header th:insert="header.html ::  nav"></header>
 <br>
 <br>
@@ -19,17 +50,17 @@
                 <div th:insert="home/sidenav.html ::  sidenav"></div>
             </div>
             <div class="col-lg-10" >
-                <nav class="navbar navbar-light bg-light mb-5" id="navbar">
+                <nav class="navbar navbar-light  mb-5 mt-5 " id="navbar">
                     <h6 class="navbar-brand " id="navbar-brand-header " href="#" th:text="${message}" ></h6>
                 </nav>
                 <div th:each=" user : ${users}" >
                     <div class="row" style="float: left;">
                         <a th:href="@{'/user/profile/'+${user.getUsername()}}" class="custom-card" style="text-decoration: none; color: #313437;">
-                            <div class="card bg-light mb-3 mr-5  ml-5 mt-2 " style="max-width: 16rem;max-width: 16rem;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.08);border-radius: 10px;overflow: hidden;text-decoration: none;">
+                            <div class="card bg-light mb-3 mr-5  ml-5 mt-2 " >
                                 <img class="card-img-top image-thumbnail" height="200" width="150" th:src="@{${user.getProfilePhoto()} }"  alt="Card image cap">
-                                <div class="card-body" style="background-color: white">
+                                <div class="card-body" >
                                     <h5 class="card-title " th:text="${user.getFirstName()} +' , ' + ${user.getAboutMe().getAge()}"></h5>
-                                    <p th:text="${user.getAboutMe().getBio()}" ></p>
+                                    <p id="user-bio" th:text="${user.getAboutMe().getBio()}" ></p>
                                 </div>
                             </div>
                         </a>

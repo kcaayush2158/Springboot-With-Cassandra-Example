@@ -14,7 +14,7 @@ import java.security.Principal;
 @Controller
 public class FileUploadController {
 
-    private AmazonService amazonService;
+    private final AmazonService amazonService;
 
     @Autowired
     FileUploadController(AmazonService amazonService) {
@@ -36,8 +36,15 @@ public class FileUploadController {
 
 
     @PostMapping("/upload")
-    public @ResponseBody String upload(Model model, @RequestPart("file") MultipartFile files,Principal principal) {
-        return this.amazonService.uploadFile(files,principal);
+    public  String upload(Model model, @RequestPart("file") MultipartFile files,Principal principal) {
+         this.amazonService.uploadFile(files,principal);
+        return "redirect:/settings";
+    }
+
+    @PostMapping("/user/p/upload")
+    public  String uploadUserPhoto(Model model, @RequestPart("file") MultipartFile files,Principal principal) {
+       this.amazonService.uploadUserImages(files,principal);
+       return "redirect:/profile";
     }
 
 

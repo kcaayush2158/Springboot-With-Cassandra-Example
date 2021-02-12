@@ -15,14 +15,13 @@ public class PrivateChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String type;
     private String ip;
-    private String chatRoomId;
-    private String message;
-    private boolean status;
-    private Date date;
     @ManyToOne
-    private User sender_id;
+    private Conversation conversation;
     @ManyToOne
-    private User receiver_id;
+    private User sender;
+    @ManyToOne
+    private User receiver;
+    private boolean Status;
+
 }

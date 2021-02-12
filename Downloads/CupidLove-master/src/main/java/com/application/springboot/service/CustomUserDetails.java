@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
 
     String role_prefix="ROLE_";
-   private String username;
-   private String password;
+   private final String username;
+   private final String password;
    private List<GrantedAuthority> authorities;
     String role;
     boolean active=true;

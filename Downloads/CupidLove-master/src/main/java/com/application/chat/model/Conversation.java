@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -16,12 +17,14 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String type;
     private String ip;
-    private String chatRoomId;
+    @NotEmpty(message = "Message cannot be empty")
     private String message;
     private boolean status;
     private Date date;
     @ManyToOne
     private User sender;
+    @ManyToOne
+    private User receiver;
+
 }

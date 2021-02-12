@@ -1,5 +1,6 @@
 package com.application.springboot.service;
 
+import com.application.springboot.model.User;
 import com.application.springboot.model.notification.Notification;
 import com.application.springboot.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class NotificationService {
         return notificationRepository.deleteNotificationById(id);
     }
 
-    public void readNotification(int id){
-         notificationRepository.readNotifications(id);
+    public void readNotification(User user){
+        notificationRepository.readNotifications (user);
     }
 
     public int getTotalProfileViews(String email){

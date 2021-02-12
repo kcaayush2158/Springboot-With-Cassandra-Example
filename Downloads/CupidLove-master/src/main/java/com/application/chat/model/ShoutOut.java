@@ -16,6 +16,7 @@ public class ShoutOut {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String ip;
+    @Lob
     private String message;
     @ManyToOne
     private User user;

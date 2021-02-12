@@ -1,3 +1,18 @@
+setInterval(function () {
+    $.ajax({
+        url:'/api/direct/u/unreadMessage',
+        method:'GET',
+        success:function (data) {
+            if(data === 0 || data ===null){
+                $('#unread-message').text();
+            }else{
+                $('#unread-message').text(data);
+            }
+        }
+    });
+},3000);
+
+
 $("#notification-button").click(function() {
     jQuery.ajax({
         url: '/api/users/notifications/get',
@@ -11,16 +26,19 @@ $("#notification-button").click(function() {
             var obj = JSON.parse(JSON.stringify(data));
             var responses = "";
 
+
             for (var i = 0; i <= obj.length; i++) {
+
                 $.ajax({
                     url: '/api/notification/read/' + data[i].id,
-                    method: 'post',
-                    type: 'json',
+                    method: 'POST',
+                    type: 'JSON',
                     success: function(data) {
                         $('#notification-button').removeClass('btn-danger').addClass('btn-light');
 
                     }
-                })
+                });
+
                 var result = ` <div class="container-fluid">
                                     <div class="col-md-12">
                                        <a href="/user/profile/` + data[i].user.username + `"  class="custom-card" style="text-decoration: none; color: #313437;">
@@ -41,11 +59,19 @@ $("#notification-button").click(function() {
                                     </div>
                                 </div>
                     `;
-                responses += result;
 
-                $('#container-notification').html(responses);
+                responses += result;
+                if(data === '' || data == null){
+                    $('#container-notification').html('<h4 class="mt-5 text-center">Notification is Empty</h4>');
+                }else{
+                    $('#container-notification').html(responses);
+                }
+
 
             }
         }
     });
+
+
+
 });

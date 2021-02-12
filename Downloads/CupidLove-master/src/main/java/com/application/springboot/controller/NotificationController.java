@@ -1,5 +1,6 @@
 package com.application.springboot.controller;
 
+import com.application.springboot.model.User;
 import com.application.springboot.model.notification.Notification;
 import com.application.springboot.service.NotificationService;
 import com.application.springboot.service.UserService;
@@ -29,7 +30,9 @@ public class NotificationController {
     }
 
     @PostMapping("/notification/read/{id}")
-    public void readNotification(@PathVariable("id")int id){
-        notificationService.readNotification(id);
+    public void readNotification(@PathVariable("id")int id,Principal principal){
+
+       User user1 = userService.findUserById(id);
+         notificationService.readNotification(user1);
     }
 }

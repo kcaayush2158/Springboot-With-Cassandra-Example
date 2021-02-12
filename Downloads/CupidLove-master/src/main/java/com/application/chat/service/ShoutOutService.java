@@ -19,9 +19,12 @@ public class ShoutOutService {
     public ShoutOut saveShoutOuts(ShoutOut shoutOut){
         return  shoutOutRepository.save(shoutOut);
     }
+
     public void deleteShoutOuts(int id){
          shoutOutRepository.deleteById(id);
     }
+
+
 
 
 

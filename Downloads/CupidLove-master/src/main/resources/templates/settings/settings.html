@@ -6,37 +6,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link th:href="@{/assets/css/navbar.css}" href="/assets/css/navbar.css" type="text/css" media="all" rel="stylesheet" />
     <link th:href="@{/assets/css/sidenav.css}" href="/assets/css/sidenav.css" type="text/css" media="all" rel="stylesheet" />
+    <link th:href="@{/assets/css/settings.css}" href="/assets/css/settings.css" type="text/css" media="all" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Settings</title>
 </head>
 <style>
-    #container-sub{
-        padding: 50px;
-    }
 
-    #custom-button{
-        background-color: #00C9A7;
-        color: white;
-        padding: 10px;
-        border: white;
-        border-radius:10px;
-    }
-    #custom-text{
-        margin-left: 10px;
-        font-family: sans-serif;
-        color: #aaa;
-    }
 </style>
 <body>
 <header th:insert="header.html ::  nav"></header>
 <div class="container-fluid mt-5">
+
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-2 "  >
                 <div style="position: fixed; " th:insert="home/sidenav.html ::  sidenav"></div>
             </div>
-            <div class="col-lg-6 " style="left: 2% ;" >
-                <div class="container-fluid mt-5 mb-5" id="container-sub">
+            <div class="col-lg-10 " >
+                <nav class="navbar navbar-light "  id="navbar" >
+                    <a class="navbar-brand mb-0 h1" href="#">Settings</a>
+
+
+                    <!-- Button trigger modal -->
+                </nav>
+                <div class="container  mb-5" id="container-sub">
                     <div class="row">
                         <!-- Tab panes -->
                         <div class="col-md-12">
@@ -47,23 +40,27 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="row">
-                                                            <div  class="img-thumbnail rounded mx-auto d-block mt-5" th:style="|background:url(@{${user.getProfilePhoto()}});height:300px; width:300px;background-size:cover;background-position:center;,margin-left:50%;| "></div>
-
-
+                                                        <div  class="img-thumbnail rounded mx-auto d-block mt-5" th:style="|background:url(@{${user.getProfilePhoto()}});height:300px; width:300px;background-size:cover;background-position:center;,margin-left:50%;| "></div>
                                                     </div>
-
                                                     <h2 class="text-center mt-4" th:text="${user.getFirstName()}+ ' '+${user.getLastName()}"></h2>
-                                                    <h6 class="text-center" th:text="${user.getUsername()}"></h6>
-                                                    <form action="" method="post" enctype="multipart/form-data">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="customFile">
-                                                            <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Choose file</label>
-                                                        </div>
-                                                    </form>
-
+                                                    <h6 class="text-center mb-5" th:text="${user.getUsername()}"></h6>
+                                                    <div class="col-md-12">
+                                                        <form action="/upload" method="post" enctype="multipart/form-data">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <div class="custom-file">
+                                                                        <input type="file" name="file" class="custom-file-input" id="customFile">
+                                                                        <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Choose file</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button class="btn btn-success" type="submit"><i class="fa fa-upload"></i> Upload</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                     <!-- Deletes the user profile-->
                                                     <button class="btn  btn-link btn-block mt-2" data-toggle="modal" data-target="#exampleModalCenter"> <i class="fas fa-exclamation-circle mr-2"></i>Delete Profile</button>
-
                                                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                                             <div class="modal-content">
@@ -92,27 +89,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <hr>
-                                                    <div class="container">
-                                                        <h1 class="mb-5">Change Password </h1>
-
-                                                        <form method="post" th:action="@{settings/password/save}">
-                                                            <div th:text="${message}"></div>
-                                                            <div class="form-group">
-                                                                <label for="oldpassword">Old Password:&nbsp;</label>
-                                                                <input class="form-control form-control-lg" id="oldpassword" name="oldPassword"  type="password">
-                                                                <label for="password">New Password:&nbsp;</label>
-                                                                <input class="form-control form-control-lg" type="password" name="password" id="password">
-                                                            </div>
-                                                            <hr>
-                                                            <br>
-                                                            <button class="btn btn-success  btn-block" style="background-color: #00C9A7;border-color: white;padding:10px;border-radius: 10px;" type="submit"><i class="fa fa-save"></i>&nbsp;Change
-                                                                Password
-                                                            </button>
-                                                        </form>
+                                                    <div class="container" >
+                                                        <span id="response"></span>
+                                                        <div id="container-password">
+                                                            <h1 class="mb-5">Change Password </h1>
+                                                            <form method="POST" id="password-form" action="/api/settings/password/save">
+                                                                <div th:text="${message}"></div>
+                                                                <div class="form-group">
+                                                                    <label for="oldpassword">Old Password:&nbsp;</label>
+                                                                    <input class="form-control form-control-lg" id="oldpassword" name="oldPassword"  type="password">
+                                                                    <label for="password">New Password:&nbsp;</label>
+                                                                    <input class="form-control form-control-lg" type="password" name="password" id="password">
+                                                                </div>
+                                                                <hr>
+                                                                <br>
+                                                                <button class="btn btn-success  btn-block" id="password-btn" style="background-color: #00C9A7;border-color: white;padding:10px;border-radius: 10px;" type="submit"><i class="fa fa-save"></i>&nbsp;Change
+                                                                    Password
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -127,41 +124,11 @@
     </div>
 </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    $('#myList a').on('click', function (e) {
-        e.preventDefault();
-        $(this).tab('show')
-    });
-
-
-</script>
-
-<script type="application/javascript">
-
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-
-    const realFileBtn = document.getElementById("real-file");
-    const customBtn = document.getElementById("custom-button");
-    const customText = document.getElementById("custom-text");
-
-    customBtn.addEventListener("click",function () {
-        realFileBtn.click();
-    });
-
-    realFileBtn.addEventListener("change",function () {
-        console.log("hello");
-        if(realFileBtn.value){
-            customText.innerText=realFileBtn.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-        }else {
-            customText.innerText= "No file choosen , yet";
-        }
-    });
-</script>
-<script th:src="@{/assets/js/header.js}" type="application/javascript" src="/assets/js/header.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
 <script src="https://kit.fontawesome.com/6f40d29aa1.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script th:src="@{/assets/js/header.js}" type="application/javascript" src="/assets/js/header.js"></script>
+<script th:src="@{/assets/js/settings.js}" type="application/javascript" src="/assets/js/settings.js"></script>
 </html>

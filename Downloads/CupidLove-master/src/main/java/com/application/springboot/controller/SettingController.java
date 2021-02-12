@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,34 +36,16 @@ public class SettingController {
     private UserRepository userRepository;
 
     // Working change the user password in the settings ....
-    @PostMapping("/settings/password/save")
-    public String changePassword(@RequestParam("oldPassword") String oldPassword, User user, Errors errors, Model model, Principal principal) {
-        if (errors.hasErrors()) {
-            model.addAttribute("message", "Please enter the valid password ");
-        }
-        String newPassword = user.getPassword();
-
-        String encryptedPassword = bCryptPasswordEncoder.encode(newPassword);
-
+    @PostMapping("/api/settings/password/save")
+    public void changePassword( @RequestParam("oldPassword") String oldPassword, @RequestParam("password") String password, User user, Model model, Principal principal) throws Exception {
+        String encryptedPassword = bCryptPasswordEncoder.encode(password);
         User user1 = userRepository.findExistingEmail(principal.getName());
-
-        System.out.println(newPassword);
-        System.out.println(user1.getPassword());
-
-        if (bCryptPasswordEncoder.matches(newPassword, user1.getPassword())) {
-            userRepository.changeUserPassword(encryptedPassword, user1.getEmail());
-            model.addAttribute("message", "password changed successfully");
-            return "settings/settings";
-        } else {
-            model.addAttribute("message", "Error!!! while saving the password");
+        if (bCryptPasswordEncoder.matches(oldPassword, user1.getPassword())) {
+              userRepository.changeUserPassword(encryptedPassword, user1.getEmail());
         }
-
-        return "settings/settings";
     }
 
-
  // delete the user profile permanently
-
     @GetMapping("/profile/delete")
     public String deleteUserProfile(Principal principal , Model model){
         User user = userService.getAllByEmail(principal.getName());
@@ -75,25 +58,6 @@ public class SettingController {
         model.addAttribute("users",userService.findExistingEmail(principal.getName()));
         return "/settings/settings";
     }
-//    //change the user information in the settings
-//    @PostMapping("/settings/bio/save")
-//    public String changeUserInformation(@Valid @ModelAttribute User user, Principal principal, BindingResult bindingResult, AboutMe aboutMe, Model message){
-//       if(bindingResult.hasErrors()){
-//           message.addAttribute("message","Please fill all the forms correctly");
-//           System.out.print("Binding error while saving in the password field");
-//           return "settings/settings";
-//       }
-//
-//        User user1 = settingService.getAllUserByEmail(principal.getName());
-//       System.out.println(principal);
-//        AboutMe profileInformation = aboutMeService.saveProfileInformationInSettings(aboutMe);
-//
-//             profileInformation.setLookingFor(aboutMe.getLookingFor());
-//             userService.saveUser(user);
-//        aboutMeService.saveAboutMe(aboutMe);
-//        System.out.println(aboutMe);
-//        message.addAttribute("message","Password changed successfully");
-//        return "settings/settings";
-//    }
+
 
 }

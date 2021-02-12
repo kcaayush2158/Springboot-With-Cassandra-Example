@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Qualifier("customUserDetailsService")
@@ -44,38 +45,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/assets/**").permitAll();
+        http.cors();
         http.csrf().disable()
-             //   .headers().frameOptions().disable().and()
-               .authorizeRequests()
+                //   .headers().frameOptions().disable().and()
+                .authorizeRequests()
                 .antMatchers(
-                       ("/assets/**"),
-                        "/",
+                        ("/assets/**"),
                         "/static/assets/**",
                         "/img/**",
+                        "/api/**",
                         "/sounds/**",
                         "/webjars/**").permitAll()
                 .antMatchers("/home").hasRole("USER")
-                .antMatchers("/","/teams","/signup","/login","/home","/aboutme","/upload","/sounds/**").permitAll()
+                .antMatchers("/", "/teams", "/signup", "/login", "/home", "/aboutme", "/upload", "/sounds/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                        .loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/",true)
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
                 .and()
-                    .logout()
-                        .invalidateHttpSession(true)
-                       // .clearAuthentication(true)
-                      //  .deleteCookies("JSESSIONID")
-                        .logoutSuccessUrl("/login?logout")
+                .logout()
+                .invalidateHttpSession(true)
+                // .clearAuthentication(true)
+                //  .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/login?logout")
                 .and()
                 .rememberMe()
-                    .key("remember-me")
-                    .rememberMeParameter("remember-me");
-
+                .key("remember-me")
+                .rememberMeParameter("remember-me");
+        http.cors();
         http.exceptionHandling().accessDeniedPage("/403");
         http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
     }
@@ -92,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PersistentTokenRepository tokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl=new JdbcTokenRepositoryImpl();
+        JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl = new JdbcTokenRepositoryImpl();
         jdbcTokenRepositoryImpl.setDataSource(dataSource);
         return jdbcTokenRepositoryImpl;
     }
@@ -108,11 +110,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ActiveUserStore activeUserStore(){
+    public ActiveUserStore activeUserStore() {
         return new ActiveUserStore();
     }
-    
-    }
+
+}
 
 
 

@@ -3,25 +3,26 @@ package com.application.springboot.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.application.springboot.model.AboutMe;
+import com.application.springboot.model.Photos;
 import com.application.springboot.model.User;
+import com.application.springboot.model.Visits;
 import com.application.springboot.model.notification.Notification;
 import com.application.springboot.repository.AboutMeRepository;
 import com.application.springboot.repository.UserRepository;
 import com.application.springboot.service.*;
+import com.application.springboot.service.LikeService.LikesService;
 import com.application.springboot.service.photo.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 public class ProfileController {
@@ -54,6 +55,10 @@ public class ProfileController {
     private NotificationService notificationService;
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private VisitService visitService;
+    @Autowired
+    private LikesService likesService;
     /*
     Working correctly ,
     Repo:-
@@ -64,8 +69,11 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView("userprofile");
         User user = userService.getAllWithUsername(username);
 
-        User currentloginInformation = userService.getAllByEmail(principal.getName());
+        User currentloginInformation = userService.findExistingEmail(principal.getName());
 
+        //gets the total no of photos
+        model.addAttribute("totalPhoto",photoService.countAllPhotos(user));
+        model.addAttribute("totalLikes",likesService.countTotalLikes(currentloginInformation,user));
         // save the notification if the principal visit other profiles
         Notification notification = new Notification();
         notification.setUserSender(principal.getName());
@@ -74,27 +82,28 @@ public class ProfileController {
         notification.setUser(currentloginInformation);
         model.addAttribute("userSender",currentloginInformation);
 
+        //gets the logged in user photo
         model.addAttribute("userPhoto",photoService.showAllPhotos(user));
-        notification.setMessage(currentloginInformation.getUsername() + " "+ "has visited your profile");
+
+        User visitedUsers =  userService.findByUsername(username);
+
+
+        Visits visits = new Visits();
+        visits.setStatus(true);
+        visits.setVisitedUser(visitedUsers);
+        visits.setReceivedUser(currentloginInformation);
+        visitService.saveVisits(visits);
+
+        notification.setMessage(currentloginInformation.getUsername() + " "+ " has visited your profile");
 
         //gets other similar users by its genders
         model.addAttribute("othersUsers",userService.findOthersSimilarUsers(user.getAboutMe().getGender()));
 
 
-
-        // dateStart = currentloginInformation.getCreatedDate().toString();
-        //String dateStop = new Date().toString();
-
-//        // Custom date format
-//        SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
-//
-//        convertIntervalOfDate(dateStart, dateStop, format);
-//
-//        notification.setDatetime_added(new Date());
-//        notification.setStatus(false);
-        if (user.getEmail() != currentloginInformation.getEmail()) {
+        if (!user.getEmail().equals(currentloginInformation.getEmail())) {
             notificationService.saveUserVisit(notification);
         }
+
         model.addAttribute("currentUser", currentloginInformation);
         User result = userService.findByUsername(username);
 
@@ -102,6 +111,13 @@ public class ProfileController {
         model.addAttribute("aboutme", user);
         return modelAndView;
     }
+
+//    @PostMapping("/user/profile/upload/photo")
+//    public String uploadPhoto(@RequestPart(value = "file") MultipartFile multipartFile, Principal principal,Model model,Photos photos){
+//         amazonService.uploadUserImages(multipartFile,principal);
+//         photos.setPhotoUrl(multipartFile.getName() );
+//         return "redirect:/profile";
+//    }
 
 
 
@@ -113,24 +129,14 @@ public class ProfileController {
   */
     @GetMapping("/profile")
     public String myProfile(Model model, Principal principal) {
-        List<Notification> notification = notificationService.getNotification(principal.getName());
-
-        User user2 = userService.getAllByEmail(principal.getName());
         User existingUser = userService.findExistingEmail(principal.getName());
-        if (principal.getName().equals(user2.getEmail())) {
-
-            for (Notification notify : notification) {
-
-                model.addAttribute("userPhoto",photoService.showAllPhotos(existingUser)) ;
-                model.addAttribute("newNotification", notificationService.countNewMessages(false, notify.getUserReceiver()));
-                model.addAttribute("notifications", notification);
-                User user = userService.findByUsername(user2.getUsername());
-                model.addAttribute("users", user);
-                model.addAttribute("totalViews",notificationService.getTotalProfileViews(principal.getName()));
-            }
-        }
+        model.addAttribute("totalPhotos",photoService.countAllPhotos(existingUser));
+        model.addAttribute("userPhoto",photoService.showAllPhotos(existingUser)) ;
+        model.addAttribute("users", existingUser);
+        model.addAttribute("totalViews",notificationService.getTotalProfileViews(principal.getName()));
     return "profile";
     }
+
 
     @PostMapping("/aboutme/save")
     public String saveUserAboutMe(
@@ -231,27 +237,8 @@ public class ProfileController {
     }
 
 
-//    private void convertIntervalOfDate(String dateStart, String dateStop, SimpleDateFormat format) {
-//        Date d1 = null;
-//        Date d2 = null;
-//        try {
-//            d1 = format.parse(dateStart);
-//            d2 = format.parse(dateStop);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Get msec from each, and subtract.
-//        long diff = d2.getTime() - d1.getTime();
-//
-//        long days = TimeUnit.MILLISECONDS.toDays(diff);
-//        long remainingHoursInMillis = diff - TimeUnit.DAYS.toMillis(days);
-//        long hours = TimeUnit.MILLISECONDS.toHours(remainingHoursInMillis);
-//        long remainingMinutesInMillis = remainingHoursInMillis - TimeUnit.HOURS.toMillis(hours);
-//        long minutes = TimeUnit.MILLISECONDS.toMinutes(remainingMinutesInMillis);
-//        long remainingSecondsInMillis = remainingMinutesInMillis - TimeUnit.MINUTES.toMillis(minutes);
-//        long seconds = TimeUnit.MILLISECONDS.toSeconds(remainingSecondsInMillis);
-//    }
+
+
 
 
 

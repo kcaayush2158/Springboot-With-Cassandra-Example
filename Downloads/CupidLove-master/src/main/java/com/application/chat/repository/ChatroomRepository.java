@@ -25,7 +25,9 @@ public interface ChatroomRepository extends JpaRepository<ChatRoom,Integer> {
     ChatRoom findChatRoomByChatRoomId(String chatRoomId);
 
     @Transactional
-    void deleteChatRoomById(@Param("id") int id);
+    @Modifying
+    @Query("DELETE FROM ChatRoom c where c.chatRoomId=:chatRoomId")
+    int deleteChatRoomByChatRoomId(@Param("chatRoomId") String chatRoomId);
 
     List<ChatRoom> findChatRoomsByCreatedBy(User user);
 
@@ -33,6 +35,6 @@ public interface ChatroomRepository extends JpaRepository<ChatRoom,Integer> {
 
     @Transactional
     @Modifying
-    @Query("update ChatRoom c set c.chatRoomName = :chatRoomName , c.chatRoomDescription = :chatRoomDescription , c.type= :chatRoomType ,c.createdTime= :createdTime where c.chatRoomName =:chatRoomName")
-    void updateChatRoom(@Param("chatRoomName")String chatRoomName, @Param("chatRoomDescription")String chatRoomDescription, @Param("chatRoomType")String chatRoomType, @Param("createdTime") Date createdTime);
+    @Query("update ChatRoom c set c.chatRoomName = :chatRoomName , c.chatRoomDescription = :chatRoomDescription , c.type= :chatRoomType ,c.createdTime= :createdTime where c.chatRoomId =:chatRoomId")
+    void updateChatRoom(@Param("chatRoomName")String chatRoomName, @Param("chatRoomDescription")String chatRoomDescription, @Param("chatRoomType")String chatRoomType, @Param("createdTime") Date createdTime,@Param("chatRoomId")String chatRoomId);
 }

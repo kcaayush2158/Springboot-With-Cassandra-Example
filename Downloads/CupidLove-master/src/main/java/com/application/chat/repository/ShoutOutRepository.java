@@ -9,6 +9,8 @@ import java.util.List;
 public interface ShoutOutRepository extends JpaRepository<ShoutOut, Integer> {
 
     @Modifying
-    @Query(value="SELECT * FROM shout_out s ORDER BY s.id desc limit 10",nativeQuery=true)
+    @Query(value="SELECT * FROM shout_out s ORDER BY s.id desc limit 50",nativeQuery=true)
     List<ShoutOut> getAllShoutOuts();
+
+
 }

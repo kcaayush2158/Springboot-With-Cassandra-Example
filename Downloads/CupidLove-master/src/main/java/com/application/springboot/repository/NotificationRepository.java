@@ -1,5 +1,6 @@
 package com.application.springboot.repository;
 
+import com.application.springboot.model.User;
 import com.application.springboot.model.notification.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,10 +27,13 @@ public interface NotificationRepository extends JpaRepository<Notification,Integ
      @Query("delete from Notification n WHERE n.id = :id ")
      int deleteNotificationById(@Param("id") int id);
 
-     @Modifying
+
      @Transactional
-     @Query(value="UPDATE Notification n set n.status=true where n.status=false and n.id=:id")
-     void readNotifications(@Param("id") int id);
+     @Modifying
+     @Query(value="UPDATE Notification n set n.status=true where n.status=false and n.userReceiver=:user ")
+     void readNotifications( @Param("user") User user);
+
+ 
 
      int countNotificationsByUserReceiver(@Param("userReceiver") String userReceiver);
 }

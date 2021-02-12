@@ -18,15 +18,29 @@ public class PhotoService {
     return  photoStorageRepository.save(photos);
     }
 
-    public int deletePhotos(int id){
+    public void deletePhotos(int id){
          photoStorageRepository.deleteById(id);
-        return id;
     }
 
     public List<Photos> showAllPhotos(User user){
         return photoStorageRepository.findAllByPrincipalName(user);
     }
 
+    public int countAllPhotos(User user){
+        return photoStorageRepository.countPhotosByPrincipalName(user);
+    }
+
+    public Photos updatePhoto(String photoUrl,int id){
+        return photoStorageRepository.updatePhoto(photoUrl,id);
+    }
+
+    public void updateUserPhotos(String photoType , int id ){
+         photoStorageRepository.updateUserPhoto(id,photoType);
+    }
+
+//    public int uploadPhotos(String url, String photoType, User user, String email){
+//        return photoStorageRepository.uploadUserPhoto(url, photoType, user, email);
+//    }
 
 
 }

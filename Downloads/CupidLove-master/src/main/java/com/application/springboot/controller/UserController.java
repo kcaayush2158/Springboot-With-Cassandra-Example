@@ -7,14 +7,12 @@ import com.application.springboot.model.userstore.ActiveUserStore;
 import com.application.springboot.repository.UserRepository;
 import com.application.springboot.service.AboutMeService;
 import com.application.springboot.service.UserService;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,43 +42,75 @@ public class UserController {
      * status: working correctly
      * */
     @PostMapping("/signup")
-    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, AboutMe aboutMe, Model model, @RequestParam("email") String email) {
-                 User existingEmail = userService.findExistingEmail(user.getEmail());
+    public String registerUser( User user,@RequestParam("username") String username, @RequestParam("lastName") String lastName, @RequestParam("bio") String bio, @RequestParam("interests") String interests, @RequestParam String firstName, @RequestParam("age") int age , @RequestParam("password") String password, @RequestParam("country") String country , @RequestParam("known") String known, @RequestParam("lookingFor") String lookingFor, @RequestParam("height") String height, @RequestParam String liveIn, @RequestParam String haveKids, @RequestParam("email") String email, @RequestParam String gender, @RequestParam String bodyType, @RequestParam String drink, @RequestParam String education, @RequestParam String eyes, @RequestParam String hair, @RequestParam String languages, @RequestParam String relationship, @RequestParam String smoke, @RequestParam String workAs, Model model) {
+//                if(bindingResult.hasErrors()){
+//                    return "signup";
+//                }
                  try {
-                     if(user.getEmail().equals(existingEmail.getEmail())){
-                         model.addAttribute("error","Email is already existed");
-                         return  "signup";
+                     User existingEmail = userService.findExistingEmail(email);
+                     if(existingEmail != null ){
+                         if(email.equals(existingEmail.getEmail())){
+                             model.addAttribute("error","User is already existed");
+                             return  "signup";
+                         }
                      }
                  }catch (NullPointerException ex){
                      ex.printStackTrace();
                  }
+//
+//            ConnectionFactory connectionFactory = new ConnectionFactory();
+//            try {
+//                Connection connection = connectionFactory.newConnection();
+//                Channel channel = connection.createChannel();
+//                channel.queueDeclare(username, false, false, false, null);
+//
+//            } catch (Exception ex) {
+//                System.out.println(ex.getMessage());
+//
+//            }
 
-            ConnectionFactory connectionFactory = new ConnectionFactory();
-            try {
-                Connection connection = connectionFactory.newConnection();
-                Channel channel = connection.createChannel();
-                channel.queueDeclare(user.getUsername(), false, false, false, null);
+        user.setRoles(Collections.singletonList(new Role("USER")));
+        user.setUsername(username);
+        user.setCreatedDate(new Date());
 
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setActive(true);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
 
-            }
-
-
-
-            user.setActive(true);
-            user.setFirstName(user.getFirstName());
-            user.setLastName(user.getLastName());
-            user.setId(user.getId());
-            user.setEmail(user.getEmail());
-            user.setRoles(Collections.singletonList(new Role("USER")));
-            user.setUsername(user.getUsername());
-            user.setCreatedDate(new Date());
-            user.setAboutMe(user.getAboutMe());
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userService.saveUser(user);
+        AboutMe aboutMe =new AboutMe();
+        aboutMe.setAge(age);
+        aboutMe.setCountry(country);
+        aboutMe.setBodyType(bodyType);
+        aboutMe.setDrink(drink);
+        aboutMe.setEducation(education);
+        aboutMe.setLiveIn(liveIn);
+        aboutMe.setEyes(eyes);
+        aboutMe.setGender(gender);
+        aboutMe.setKnown(known);
+        aboutMe.setHaveKids(haveKids);
+        aboutMe.setHair(hair);
+        aboutMe.setHeight(height);
+       aboutMe.setInterests(interests);
+        aboutMe.setLanguages(languages);
+        aboutMe.setLiveIn(liveIn);
+        aboutMe.setLookingFor(lookingFor);
+        aboutMe.setRelationship(relationship);
+        aboutMe.setSmoke(smoke);
+        aboutMe.setWorkAs(workAs);
+        aboutMe.setBio(bio);
+        aboutMe.setKnown(known);
+        user.setAboutMe(aboutMe);
+        System.out.println(aboutMe);
+         userService.saveUser(user);
+        model.addAttribute("user",user);
         return "login";
 
+    }
+    @GetMapping("/visits")
+    public String visitsPage(Model model){
+        return "visits";
     }
 
     @PostMapping("/user/aboutme/save")
@@ -126,7 +156,6 @@ public class UserController {
         }
         return "search";
     }
-
 
 
 

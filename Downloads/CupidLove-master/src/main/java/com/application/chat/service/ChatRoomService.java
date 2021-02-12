@@ -34,11 +34,11 @@ public class ChatRoomService {
         return chatroomRepository.findChatRoomByChatRoomId(chatRoomId);
     }
 
-    public void updateChatRoom(String chatRoomName, String chatRoomDescription, String chatRoomType, Date createdTime){
-        chatroomRepository.updateChatRoom(chatRoomName, chatRoomDescription, chatRoomType, createdTime);
+    public void updateChatRoom(String chatRoomName, String chatRoomDescription, String chatRoomType, Date createdTime,String chatRoomId){
+        chatroomRepository.updateChatRoom(chatRoomName, chatRoomDescription, chatRoomType, createdTime,chatRoomId);
     }
-    public void deleteChatRoom(int id){
-        chatroomRepository.deleteChatRoomById(id);
+    public int deleteChatRoom(String chatRoomId){
+        return chatroomRepository.deleteChatRoomByChatRoomId(chatRoomId);
     }
     public List<ChatRoom> findChatRoomCreatedBy(User user){
         return chatroomRepository.findChatRoomsByCreatedBy(user);
@@ -46,7 +46,7 @@ public class ChatRoomService {
 
     public int countAllChatroom(User user){
         return chatroomRepository.countAllByCreatedBy( user);
-    };
+    }
 
 
 }

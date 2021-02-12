@@ -21,6 +21,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ChatRoomController {
     @Autowired
     private ChatRoomService chatRoomService;
@@ -30,15 +31,26 @@ public class ChatRoomController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/chatroom/create")
-    public String createChatRoom(@ModelAttribute("chatRoom") ChatRoom chatRoom, @RequestParam("chatRoomName") String chatRoomName, @RequestParam("password") String password, @RequestParam("roomDescription") String roomDescription, @RequestParam("roomType") String roomType, Model model, Principal principal) throws UnknownHostException {
+    public String createChatRoom(@ModelAttribute("chatRoom") ChatRoom chatRoom, @RequestParam("chatRoomName") String chatRoomName, @RequestParam("password") String password, @RequestParam("roomDescription") String roomDescription, @RequestParam("roomType") String roomType, Model model, Principal principal) throws Exception {
 
         User user = userService.findExistingEmail(principal.getName());
         ChatRoom existedChatRoom = chatRoomService.findByChatRoomName(chatRoomName);
 
         if (existedChatRoom != null) {
             if (existedChatRoom.getChatRoomName().equals(chatRoomName)) {
-                System.out.print("UPDATING THE ROOM....");
-                chatRoomService.updateChatRoom(chatRoomName, roomDescription, roomType, new Date());
+
+                    //updates the chatroom by the principal
+                if(existedChatRoom.getCreatedBy().getEmail().equals(principal.getName())){
+                    System.out.println(existedChatRoom.getCreatedBy().getEmail());
+                    System.out.println(principal.getName());
+                    ChatRoom chatroom = chatRoomService.findChatRoomByChatRoomId(existedChatRoom.getChatRoomId());
+                    System.out.println(chatroom);
+                    chatRoomService.updateChatRoom(chatRoomName, roomDescription, roomType, new Date(),existedChatRoom.getChatRoomId());
+
+                }else{
+                    throw new Exception("You are unable to change the room");
+                }
+
 
             }
         }
@@ -59,28 +71,50 @@ public class ChatRoomController {
         return "redirect:/chatroom";
 
     }
-    @GetMapping("/chatroom/search/{name}")
-    public @ResponseBody String searchChatRoom(@PathVariable("name") String name) {
-        List < ChatRoom > chatRooms = chatRoomService.searchChatRooms(name);
-        String result = "";
-        for (ChatRoom room: chatRooms) {
-            result += "<div class=\"card bg-light mb-3 mr-5  ml-5 mt-2 \" id=\"custom-card-design\">" +
-                    "<div class=\"card-body\"><h5 class=\"card-title\">" + room.getChatRoomName() + "</h5>" +
-                    "<p class=\"card-text\">" + room.getChatRoomDescription() + "</p><br>" +
-                    "<button class='btn btn-success'>Join Room</button>" +
-                    " </div>" +
-                    "</div>";
-        }
-        return result;
+
+    @PostMapping("/chatroom/{chatRoomId}/update")
+    public String updateChatRooms(ChatRoom chatRoom,@PathVariable("chatRoomId") String ChatRoomId ,@RequestParam("chatRoomName") String chatRoomName, @RequestParam("password") String password, @RequestParam("roomDescription") String roomDescription, @RequestParam("roomType") String roomType, Model model, Principal principal) throws Exception {
+
+        User user = userService.findExistingEmail(principal.getName());
+        ChatRoom existedChatRoom = chatRoomService.findChatRoomByChatRoomId(ChatRoomId);
+
+                if (existedChatRoom.getCreatedBy().getEmail().equals(principal.getName())) {
+                    Conversation conversation = new Conversation();
+                    InetAddress ip = InetAddress.getLocalHost();
+
+                    chatRoom.setChatRoomName(chatRoomName);
+                    chatRoom.setType(roomType);
+                    chatRoom.setCreatedBy(user);
+                    chatRoom.setPassword(bCryptPasswordEncoder.encode(password));
+                    chatRoom.setChatRoomDescription(roomDescription);
+                    chatRoom.setCreatedTime(new Date());
+                    chatRoomService.updateChatRoom(chatRoomName, roomDescription, roomType, new Date(), existedChatRoom.getChatRoomId());
+                    return "redirect:/chatroom";
+
+                } else {
+                    throw new Exception("Unable To Update Room");
+                }
+
     }
+
+    @GetMapping("/chatroom/search/{name}")
+    @ResponseBody
+    public List<ChatRoom>  searchChatRooms(@PathVariable("name") String name) {
+        List<ChatRoom> chatRooms = chatRoomService.searchChatRooms(name);
+        return chatRooms;
+
+    }
+
+
     @GetMapping("/chatroom/{ChatroomId}")
     public @ResponseBody ChatRoom rooms(@PathVariable("ChatroomId") String ChatroomId, Model model) {
         return chatRoomService.findChatRoomByChatRoomId(ChatroomId);
     }
 
-    @PostMapping("/chatroom/{id}/delete")
-    public void chatRoom(@PathVariable("id") int id) {
-        chatRoomService.deleteChatRoom(id);
+    @PostMapping("/chatroom/{chatRoomId}/delete")
+    @ResponseBody
+    public int deleteChatRoom(@PathVariable("chatRoomId") String chatRoomId) {
+         return chatRoomService.deleteChatRoom(chatRoomId);
     }
 
 

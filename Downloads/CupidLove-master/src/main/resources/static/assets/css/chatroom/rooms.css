@@ -56,18 +56,17 @@
     width: auto;
 }
 .messaging-section{
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top:20px;
+    margin-bottom:20px;
 }
 #message-body-receiver{
     background-color: #eb4034;
     box-shadow: 0 20px 8px 0 rgba(0,0,0,0.08);
     width: auto;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    max-width: 200px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: 250px;
+
 }
 .messaging-container{
     box-shadow: 0 4px 8px 3px rgba(0,0,0,0.08);

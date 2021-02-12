@@ -7,6 +7,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.application.springboot.model.Photos;
+import com.application.springboot.service.photo.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,9 +35,12 @@ public class AmazonService {
     @Value("${SECRET-KEY}")
     private String secretKey;
     @Autowired
+    private PhotoService photoService;
+
+    @Autowired
     private UserService userService;
 
-    /*This function uses the basic authen
+    /*This function uses the basic authentication in AWS
     *
     * */
     @PostConstruct
@@ -46,15 +51,28 @@ public class AmazonService {
                             .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
     }
 
+    // This method is used to upload the user profile photo
     public String uploadFile(MultipartFile multipartFile, Principal principal){
         String fileUrl ="";
             try {
                  File file = convertMultiPartToFile(multipartFile);
                  String fileName = generateFileName(multipartFile);
-                 fileUrl = endPointurl + "/"+ bucketName + "/" + fileName;
+                 fileUrl = endPointurl + "/"+ bucketName + "/photos/" + fileName;
                 uploadFileToS3Bucket(fileName,file,principal);
-                changeUserProfilePic(principal,null);
-                Model model = null;
+                ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                        .withBucketName(bucketName)
+                        .withPrefix(principal.getName()+"/photos/").withDelimiter("/");
+                ObjectListing objectListing;
+
+                do{
+                    objectListing = s3client.listObjects(listObjectsRequest);
+
+                    for(S3ObjectSummary objectSummary: objectListing.getObjectSummaries()){
+                        userService.changeUserProfilePicture("https://user-photo-videos.s3.amazonaws.com/" + objectSummary.getKey(),principal.getName());
+
+                        return  "settings/settings";
+                    }
+                }while (objectListing.isTruncated());
                 file.delete();
              } catch (Exception ex) {
                 ex.printStackTrace();
@@ -62,12 +80,52 @@ public class AmazonService {
         return "settings/settings";
     }
 
+    // This method is used to upload the photo in the amazon and the db
+    public String uploadUserImages(MultipartFile multipartFile,Principal principal) {
+        String fileUrl ;
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            String fileName = generateFileName(multipartFile);
+            fileUrl = endPointurl + "/" + bucketName + "/photos/" + fileName;
+            uploadFileToS3Bucket(fileName,file,principal);
+
+
+            ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                    .withBucketName(bucketName)
+                    .withPrefix(principal.getName()+"/photos/").withDelimiter("/");
+            ObjectListing objectListing;
+
+            do{
+                objectListing = s3client.listObjects(listObjectsRequest);
+
+                for(S3ObjectSummary objectSummary: objectListing.getObjectSummaries()){
+                    System.out.print("------------------------------");
+                    //saving the user photo
+                    Photos photos = new Photos();
+                    photos.setPhotoUrl("https://user-photo-videos.s3.amazonaws.com/"+principal.getName()+"/photos/" + fileName);
+                    photos.setPhotoType("PUBLIC");
+                    photos.setPrincipalName(userService.findExistingEmail(principal.getName()));
+                    photoService.savePhotos(photos);
+                    System.out.print("------------------------------");
+                    return  "redirect:/profile";
+                }
+            }while (objectListing.isTruncated());
+            file.delete();
+            return "redirect:/profile";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/profile";
+    }
+
     private void uploadFileToS3Bucket(String fileName, File file,Principal principal) {
-        s3client.putObject(new PutObjectRequest(bucketName,principal.getName()+"/"+fileName,file)
+        s3client.putObject(new PutObjectRequest(bucketName,principal.getName()+"/photos/"+fileName,file)
                 .withCannedAcl(CannedAccessControlList.PublicRead)
             );
 
     }
+
+
 
     private String generateFileName(MultipartFile multipartFile) {
         return  new Date().getTime()+"-"+multipartFile.getOriginalFilename().replace("","_");
@@ -80,31 +138,6 @@ public class AmazonService {
         fileOutputStream.close();
         return convFile;
     }
-
-
-
-    public String  changeUserProfilePic(Principal principal,Model model){
-
-        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-                .withBucketName(bucketName)
-                .withPrefix(principal.getName()+"/").withDelimiter("/");
-        ObjectListing objectListing;
-
-        do{
-            objectListing = s3client.listObjects(listObjectsRequest);
-
-            for(S3ObjectSummary objectSummary: objectListing.getObjectSummaries()){
-                userService.changeUserProfilePicture("https://user-photo-videos.s3.amazonaws.com/" + objectSummary.getKey(),principal.getName());
-
-                return  "settings/settings";
-            }
-        }while (objectListing.isTruncated());
-        return  "settings/settings";
-    };
-
-
-
-    //
 
 
 

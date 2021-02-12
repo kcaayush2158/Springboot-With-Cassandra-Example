@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Date;
@@ -24,19 +25,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty
+    @NotEmpty(message = "First Name is required")
     private String firstName;
-    @NotEmpty
+    @NotEmpty(message = "Last Name is required")
     private String lastName;
     @Email(message = "Email is invalid")
-    @NotEmpty
+    @NotEmpty(message = "Email is invalid")
     private String email;
     private boolean isActive;
     @Size(message = "Password length should be more than 6 characters",min = 6)
     private String password;
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Valid
+    @NotNull
     private AboutMe aboutMe;
-    @NotEmpty
+
+    @NotNull(message = "Username cannot be empty")
     private String username;
     @Temporal(TemporalType.DATE)
     private Date createdDate;

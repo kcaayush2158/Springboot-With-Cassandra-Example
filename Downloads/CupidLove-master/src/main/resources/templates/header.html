@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
@@ -34,7 +36,8 @@
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
                     <li class="nav-item"  role="presentation"><a class="ml-3 text-black nav-bar"  th:href="@{/}"> Home</a></li>
-                    <li class="nav-item  dropdown" >
+
+                    <li class="nav-item  dropdown" role="presentation" >
                         <a class="nav-link dropdown-toggle nav-bar ml-3 text-black"   href="#" id="navbarDropdown-search" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Search
                         </a>
@@ -328,12 +331,13 @@
                             </form>
                         </div>
                     </li>
+                    <li class="nav-item"  role="presentation"><a class="ml-3 text-black nav-bar"  th:href="@{/message}"> Message <span class="badge badge-danger" id="unread-message"></span> </a></li>
                 </th:block>
             </ul>
             <th:block sec:authorize="isAuthenticated()">
                 <li class="nav-item dropdown" >
                     <a aria-expanded="false" role="button" data-toggle="dropdown" id="notifications" aria-haspopup="true" >
-                        <button class="btn btn-light mr-3" id="notification-button">
+                        <button class="btn btn-light btn-lg mr-3" id="notification-button">
                             <b><i class="fas fa-bell "   id="notification-number">
                             </i></b>
                         </button>

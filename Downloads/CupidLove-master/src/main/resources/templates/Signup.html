@@ -58,14 +58,14 @@
 
         <div class="form-group">
             <label for="username">Username: </label>
-            <input   name="username" id="username"   type="text" class="form-control mb-2 form-control-lg" autofocus />
+            <input   name="username" id="username"  data-parsley-minlength="3" required  type="text" class="form-control mb-2 form-control-lg" autofocus />
             <div class="col-sm-5 messages"></div>
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid username</div>-->
         </div>
         <!--  ===============================================Email field ========================================-->
         <div class="form-group">
             <label for="email">Email: </label>
-            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-parsley-trigger="change" required=""  name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
+            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-parsley-trigger="change"  data-parsley-type="email" required=""  name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Email</div>-->
             <div class="col-sm-5 messages"></div>
         </div>
@@ -73,7 +73,7 @@
                 <div class="form-group">
                     <div class="form-group">
                         <label for="password">Password: </label>
-                        <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$"  name="password" id="password" type="password" class="form-control mb-2 form-control-lg" required />
+                        <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$" data-parsley-minlength="6"  data-parsley-maxlength="20"   name="password" id="password" type="password" class="form-control mb-2 form-control-lg" required />
 <!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Password</div>-->
                         <div class="col-sm-5 messages"></div>
                     </div>
@@ -90,7 +90,7 @@
 
         <div class="form-group">
             <label for="age">Age</label>
-            <select name="age" id="age"   class="form-control" required>
+            <select name="age" id="age"  data-parsley-range="[18, 80]"  class="form-control" required>
                 <th:block th:each="i : ${#numbers.sequence( 18, 80)}">
                     <option th:value="${i}" th:text="${i}"></option>
                 </th:block>
@@ -125,10 +125,6 @@
                 <option value="Graduate Degree<">Graduate Degree</option>
                 <option value="PhD">PhD</option>
             </select>
-            <div class="col-sm-5 messages"></div>
-            <div class="col-sm-5 messages"></div>
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.education')}" th:errors="*{aboutMe.education}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Education</div>-->
-
         </div>
         <div class="form-group">
             <label for="country">What is your Country Name ? </label>
@@ -381,19 +377,14 @@
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
             </select>
-            <div class="col-sm-5 messages"></div>
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.country')}" th:errors="*{aboutMe.country}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Country</div>-->
-
         </div>
         <div class="form-group">
             <label for="interests">Interests</label>
             <textarea class="form-control" name="interests" required id="interests"> </textarea>
-            <div class="col-sm-5 messages"></div>
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.interests')}" th:errors="*{aboutMe.interests}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Interests</div>-->
         </div>
         <div class="form-group">
             <label for="bio">Bio</label>
-            <textarea class="form-control"  name="bio" required id="bio"> </textarea>
+            <textarea class="form-control"  name="bio" required id="bio" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="255" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold="10"> </textarea>
             <div class="col-sm-5 messages"></div>
 <!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.bio')}" th:errors="*{aboutMe.bio}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Bio</div>-->
         </div>

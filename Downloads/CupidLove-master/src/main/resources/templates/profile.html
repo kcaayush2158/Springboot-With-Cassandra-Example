@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="http://parsleyjs.org/src/parsley.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.css" integrity="sha512-Woz+DqWYJ51bpVk5Fv0yES/edIMXjj3Ynda+KWTIkGoynAMHrqTcDUQltbipuiaD5ymEo9520lyoVOo9jCQOCA==" crossorigin="anonymous" />
     <!-- CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -221,38 +222,38 @@
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <form th:action="@{/aboutme/save}" method="post">
+                                                        <form th:action="@{/aboutme/save}" id="my-form" method="post">
                                                             <div class="modal-body">
                                                                 <div class="tab-content" id="myTabContent">
                                                                     <!--========================TAB CONTENT BASIC INFORMATION ===================================-->
-                                                                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="basic-tab">
+                                                                    <div class="tab-pane fade show active" id="home" role="tabpanel" required aria-labelledby="basic-tab">
                                                                         <h3 class="text-center">Your Basics</h3>
                                                                         <div class="form-group">
                                                                             <label for="firstName">First Name</label>
-                                                                            <input type="text" name="firstName" id="firstName" th:value="${users.getFirstName()} " class="form-control">
+                                                                            <input type="text" name="firstName"   id="firstName" required th:value="${users.getFirstName()} " class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="lastName">Last Name :</label>
-                                                                            <input type="text" name="lastName" id="lastName" th:value="${users.getLastName()}" class="form-control">
+                                                                            <input type="text" name="lastName" id="lastName" required th:value="${users.getLastName()}" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="age">Age</label>
-                                                                            <input type="text" name="age" id="age" th:value="${users.getAboutMe().getAge()}" min="18" max="80" class="form-control">
+                                                                            <input type="text" name="age" id="age" required th:value="${users.getAboutMe().getAge()}" min="18" max="80" class="form-control">
                                                                         </div>
                                                                         <label for="gender">What is your Gender ? </label>
                                                                         <select class="form-control" name="gender" id="gender">
-                                                                            <option th:value="${users.getAboutMe().getGender()}" th:text="${users.getAboutMe().getGender()}" selected></option>
+                                                                            <option th:value="${users.getAboutMe().getGender()}"  required th:text="${users.getAboutMe().getGender()}" selected></option>
                                                                             <option  data-divider="true"></option>
                                                                             <option value="Male">Male</option>
                                                                             <option value="Female">Female</option>
                                                                         </select>
                                                                         <div class="form-group">
                                                                             <label for="liveIn">Which city do you live ??</label>
-                                                                            <input type="text" name="liveIn" id="liveIn" th:value="${users.getAboutMe().getLiveIn()}" class="form-control">
+                                                                            <input type="text" required name="liveIn" id="liveIn"  th:value="${users.getAboutMe().getLiveIn()}" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="education">What is your Education Level?</label>
-                                                                            <select class="form-control" name="education" id="education">
+                                                                            <select class="form-control" name="education" required id="education">
                                                                                 <option selected th:value="${users.getAboutMe().getEducation()}" th:text="${users.getAboutMe().getEducation()}" ></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="High School">High School</option>
@@ -265,7 +266,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="country">What is your Country Name ? </label>
-                                                                            <select class="form-control" id="country" name="country">
+                                                                            <select class="form-control" id="country" required name="country">
                                                                                 <option th:value="${users.getAboutMe().getCountry()}" th:text="${users.getAboutMe().getCountry()}" selected ></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Afghanistan">Afghanistan</option>
@@ -518,11 +519,11 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="bio">Bio</label>
-                                                                            <textarea class="form-control" th:value="${users.getAboutMe().getBio()}" th:text="${users.getAboutMe().getBio()}"  name="bio" id="bio"> </textarea>
+                                                                            <textarea class="form-control"  required th:value="${users.getAboutMe().getBio()}" th:text="${users.getAboutMe().getBio()}"  name="bio" id="bio"> </textarea>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="interests">Interests</label>
-                                                                            <textarea class="form-control" th:value="${users.getAboutMe().getInterests()}" th:text="${users.getAboutMe().getInterests()}" name="interests" id="interests"> </textarea>
+                                                                            <textarea class="form-control" required th:value="${users.getAboutMe().getInterests()}" th:text="${users.getAboutMe().getInterests()}" name="interests" id="interests"> </textarea>
                                                                         </div>
                                                                     </div>
                                                                     <!-- =============================Appearance ===========================================-->
@@ -530,7 +531,7 @@
                                                                         <h3 class="text-center">Your Appearance</h3>
                                                                         <div class="form-group">
                                                                             <label for="bodyType "> What is your body type ?</label>
-                                                                            <select class="form-control" name="bodyType" id="bodyType ">
+                                                                            <select class="form-control" required name="bodyType" id="bodyType ">
                                                                                 <option th:value="${users.getAboutMe().getBodyType()}" th:text="${users.getAboutMe().getBodyType()}" selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Average">Average</option>
@@ -542,7 +543,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="height">What is your height ?</label>
-                                                                            <select class="form-control autofill" name="height" id="height" tabindex="2">
+                                                                            <select class="form-control autofill" required  name="height" id="height" tabindex="2">
                                                                                 <option th:value="${users.getAboutMe().getHeight()}" th:text="${users.getAboutMe().getHeight()}" selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="91">3'</option>
@@ -609,7 +610,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="eye">What is your eye colour ?</label>
-                                                                            <select class="form-control autofill" name="eyes" tabindex="2" id="eye">
+                                                                            <select class="form-control autofill" name="eyes"  required tabindex="2" id="eye">
                                                                                 <option  th:text="${users.getAboutMe().getEyes()}" th:value="${users.getAboutMe().getEyes()}" selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="blue">Blue</option>
@@ -621,7 +622,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="hair">What is your hair color?</label>
-                                                                            <select class="form-control autofill" name="hair" id="hair" tabindex="2">
+                                                                            <select class="form-control autofill" required  name="hair" id="hair" tabindex="2">
                                                                                 <option  th:text="${users.getAboutMe().getHair()}" th:value="${users.getAboutMe().getHair()}" selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="black">Black</option>
@@ -638,7 +639,7 @@
                                                                         <h3 class="text-center">Your Lifestyle</h3>
                                                                         <div class="form-group">
                                                                             <label for="languages">Which Language do you know?</label>
-                                                                            <select class="form-control" name="languages" id="languages">
+                                                                            <select class="form-control" required name="languages" id="languages">
                                                                                 <option th:value="${users.getAboutMe().getLanguages()}" th:text="${users.getAboutMe().getLanguages()}"  selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Afrikaans">Afrikaans</option>
@@ -717,7 +718,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="relationship">What is your relationship Status?</label>
-                                                                            <select class="form-control" name="relationship" id="relationship">
+                                                                            <select class="form-control" required  name="relationship" id="relationship">
                                                                                 <option th:value="${users.getAboutMe().getRelationship()}" th:text="${users.getAboutMe().getRelationship()}"  selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Single">Single</option>
@@ -728,11 +729,11 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="known">Known</label>
-                                                                            <input type="text" name="known" id="known" th:value="${users.getAboutMe().getKnown()}" class="form-control">
+                                                                            <input type="text" name="known" required  id="known" th:value="${users.getAboutMe().getKnown()}" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="workAs">What is your Occupation ?</label>
-                                                                            <select class="form-control" name="workAs" id="workAs">
+                                                                            <select class="form-control" required name="workAs" id="workAs">
                                                                                 <option th:value="${users.getAboutMe().getWorkAs()}" th:text="${users.getAboutMe().getWorkAs()}" selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Administrative / Secretarial / Clerical">Administrative / Secretarial / Clerical</option>
@@ -772,11 +773,11 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="lookingFor" >Looking For?</label>
-                                                                            <textarea class="form-control" name="lookingFor" id="lookingFor" minlength="" maxlength="255" rows="5" th:value="${users.getAboutMe().getLookingFor()}" th:text="${users.getAboutMe().getLookingFor()}" selected></textarea>
+                                                                            <textarea class="form-control" required name="lookingFor" id="lookingFor" minlength="" maxlength="255" rows="5" th:value="${users.getAboutMe().getLookingFor()}" th:text="${users.getAboutMe().getLookingFor()}" selected></textarea>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="haveKids">Do you have kids?</label>
-                                                                            <select class="form-control" name="haveKids" id="haveKids">
+                                                                            <select class="form-control" required name="haveKids" id="haveKids">
                                                                                 <option th:value="${users.getAboutMe().getHaveKids()}" th:text="${users.getAboutMe().getHaveKids()}"  selected></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="No">No</option>
@@ -788,7 +789,7 @@
                                                                         <div class="form-group">
                                                                             <label for="smoke">Do you smoke ?</label>
                                                                             <hr>
-                                                                            <select class="form-control" name="smoke" id="smoke">
+                                                                            <select class="form-control" required  name="smoke" id="smoke">
                                                                                 <option th:value="${users.getAboutMe().getSmoke()}" th:text="${users.getAboutMe().getSmoke()}" selected ></option>
                                                                                 <option  data-divider="true"></option>
                                                                                 <option value="Never">Never</option>
@@ -798,7 +799,7 @@
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="drink">Do you Drink ?</label>
-                                                                            <select class="form-control" name="drink" id="drink">
+                                                                            <select class="form-control" required name="drink" id="drink">
                                                                                 <option  data-divider="true"></option>
                                                                                 <option th:value="${users.getAboutMe().getDrink()}" th:text="${users.getAboutMe().getDrink()}" selected></option>
                                                                                 <option value="Never">Never</option>
@@ -959,4 +960,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 <script th:src="@{/assets/js/header.js}" type="application/javascript" src="/assets/js/header.js"></script>
 <script th:src="@{/assets/js/profile.js}" type="application/javascript" src="/assets/js/profile.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
+<script type="text/javascript">
+    $('#my-form').parsley();
+</script>
 </html>

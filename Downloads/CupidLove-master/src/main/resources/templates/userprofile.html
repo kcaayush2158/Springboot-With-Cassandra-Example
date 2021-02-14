@@ -93,7 +93,7 @@
                 <th:block th:if="${totalPhoto != '' || totalPhoto != null }    " >
                     <div class="container" style="padding-bottom: 50px;">
                         <hr>
-                        <h2 class="text-center" th:text="${totalPhoto != ''} ? 'MEDIAS ' : '' " style="padding-top: 50px;padding-bottom:50px;"></h2>
+                        <h2 class="text-center" th:text="${totalPhoto != ''} ? 'MEDIAS ' : '' " style="padding-top: 50px;padding-bottom:50px;font-family: 'Poppins', sans-serif;"></h2>
 
                            <!-- Button trigger modal -->
                             <div class="owl-carousel owl-theme">
@@ -476,17 +476,16 @@
                                             </tr>
                                             <tr scope="row">
                                                 <td class="text-bold">Hair :</td>
-                                                <th:block th:if="${users.getAboutMe().getHair() != null}">
-                                                    <td class="table-success"
-                                                        th:text="${users.getAboutMe().getHair()}"></td>
+                                                <th:block th:if="${users.getAboutMe().getHair()} == ${currentUser.getAboutMe().getHair()}">
+                                                    <td class="table-success" th:text="${users.getAboutMe().getHair()}"></td>
                                                 </th:block>
-                                                <th:block th:if="${users.getAboutMe().getHair() == null}">
+                                                <th:block th:if="${users.getAboutMe().getHair() != null}">
                                                     <td class="table-light" th:text="${'Not Updated'}"></td>
                                                 </th:block>
+
                                                 <div th:if="${users.getAboutMe().getHair()} == ${currentUser.getAboutMe().getHair()}">
                                                     <th:block th:if="${currentUser.getAboutMe().getHair() != null}">
-                                                        <td class="table-success"
-                                                            th:text="${currentUser.getAboutMe().getHair()}"></td>
+                                                        <td class="table-success" th:text="${currentUser.getAboutMe().getHair()}"></td>
                                                     </th:block>
                                                     <th:block th:if="${currentUser.getAboutMe().getHair() == null}">
                                                         <td class="table-light" th:text="${'Update Now'}"></td>
@@ -494,8 +493,7 @@
                                                 </div>
                                                 <div th:if="${users.getAboutMe().getHair()} != ${currentUser.getAboutMe().getHair()}">
                                                     <th:block th:if="${currentUser.getAboutMe().getHair() != null}">
-                                                        <td class="table-danger"
-                                                            th:text="${currentUser.getAboutMe().getHair()}"></td>
+                                                        <td class="table-danger" th:text="${currentUser.getAboutMe().getHair()}"></td>
                                                     </th:block>
                                                     <th:block th:if="${currentUser.getAboutMe().getHair() == null}">
                                                         <td class="table-light" th:text="${'Update Now'}"></td>
@@ -511,10 +509,10 @@
                                                 <th:block th:if="${users.getAboutMe().getBodyType() == null}">
                                                     <td class="table-light" th:text="${'Not Updated'}"></td>
                                                 </th:block>
+
                                                 <div th:if="${users.getAboutMe().getBodyType()} == ${currentUser.getAboutMe().getBodyType()}">
                                                     <th:block th:if="${currentUser.getAboutMe().getBodyType() != null}">
-                                                        <td class="table-success"
-                                                            th:text="${currentUser.getAboutMe().getBodyType()}"></td>
+                                                        <td class="table-success" th:text="${currentUser.getAboutMe().getBodyType()}"></td>
                                                     </th:block>
                                                     <th:block th:if="${currentUser.getAboutMe().getBodyType() == null}">
                                                         <td class="table-light" th:text="${'Update Now'}"></td>
@@ -522,8 +520,7 @@
                                                 </div>
                                                 <div th:if="${users.getAboutMe().getBodyType()} != ${currentUser.getAboutMe().getBodyType()}">
                                                     <th:block th:if="${currentUser.getAboutMe().getBodyType() != null}">
-                                                        <td class="table-danger"
-                                                            th:text="${currentUser.getAboutMe().getBodyType()}"></td>
+                                                        <td class="table-danger"  th:text="${currentUser.getAboutMe().getBodyType()}"></td>
                                                     </th:block>
                                                     <th:block th:if="${currentUser.getAboutMe().getBodyType() == null}">
                                                         <td class="table-light" th:text="${'Update Now'}"></td>
@@ -541,7 +538,7 @@
                                 <div class="card-body" id="card-body-lookingfor">
                                     <h2 class="text-center text-danger card-title">Looking For&nbsp;</h2>
                                     <h6 class="text-muted card-subtitle mb-2"></h6>
-                                    <p class="card-text text-bold" th:text="${users.getAboutMe().getLookingFor()}"></p>
+                                    <p class="card-text " th:text="${users.getAboutMe().getLookingFor()}"></p>
                                     <a class="card-link" href="#"></a><a class="card-link" href="#"></a>
                                 </div>
                                 <div class="card-body">
@@ -581,7 +578,7 @@
                             <div class="card" style="width: 18rem;height: auto;">
                                 <h2 class="text-center text-danger card-title mt-3 mb-2">Interest</h2>
                                 <div class="card-body" id="card-body-interest">
-                                    <p class="card-text text-bold" th:text="${users.getAboutMe().getInterests()}"></p>
+                                    <p class="card-text " th:text="${users.getAboutMe().getInterests()}"></p>
                                 </div>
                             </div>
                         </div>

@@ -4,7 +4,6 @@ import com.application.chat.model.PrivateChatMessage;
 import com.application.chat.service.PrivateMessageService;
 import com.application.springboot.model.User;
 import com.application.springboot.service.UserService;
-import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -35,7 +35,6 @@ $("#notification-button").click(function() {
                     type: 'JSON',
                     success: function(data) {
                         $('#notification-button').removeClass('btn-danger').addClass('btn-light');
-
                     }
                 });
 

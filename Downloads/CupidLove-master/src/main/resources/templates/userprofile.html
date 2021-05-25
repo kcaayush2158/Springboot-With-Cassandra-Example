@@ -568,6 +568,10 @@
                                                 <td class="text-bold">Last Connection:</td>
                                                 <td th:text="${users.getLastConnection() != null} ?  ${users.getLastConnection()} : 'Not updated' "></td>
                                             </tr>
+                                            <tr>
+                                                <td class="text-bold">Profile Likes:</td>
+                                                <td th:text="${totalLikes !=null} ? ${totalLikes} : '0'"></td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>

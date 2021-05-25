@@ -3,6 +3,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="http://parsleyjs.org/src/parsley.css" />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
+
     <link rel="stylesheet" th:href="@{/assets/css/signup.css}" type="text/css" href="/assets/css/signup.css" media="all" >
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link th:href="@{/assets/css/navbar.css}" href="/assets/css/navbar.css" type="text/css" media="all" rel="stylesheet" />
@@ -10,6 +12,8 @@
 </head>
 <body>
 <header th:insert="header.html ::  nav"></header>
+
+
 <div th:if="${param.success}">
     <div class="alert alert-info">You've successfully registered to our awesome app!</div>
 </div>
@@ -17,10 +21,15 @@
     <div class="alert alert-info">You've successfully logout</div>
 </div>
 
-<div class="container col-lg-5" id="signup-form">
+<br><br><br>
+<div class="container-fluid col-lg-5 mt-5" id="grad1">
+    <div class="row justify-content-center mt-0">
+        <div class="col-12 text-center p-0 mt-3 mb-2">
+            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+
     <h2 class="text-center" style="font-size:33px;">
-        <strong>Account Signup</strong>
-        <hr class="col-lg-5 mb-4">
+        <h2><strong>Sign Up Your User Account</strong></h2>
+        <p>Fill all form field to go to next step</p>
     </h2>
 
     <div  th:if="${error}">
@@ -28,61 +37,61 @@
         </div>
     </div>
     <br><br>
-    <!--/*@thymesVar id="userRegistration" type="com.application.springboot.model.UserRegistration      "*/-->
-    <form method="POST"  th:action="@{/signup}" data-parsley-validate id="demo-form"  >
 
+<form method="POST"  th:action="@{/signup}" data-parsley-validate id="msform"  >
+    <!-- progressbar -->
+    <ul id="progressbar">
+        <li class="active" id="account"><strong>Account</strong></li>
+        <li id="personal"><strong>Personal</strong></li>
+        <li id="payment"><strong>Payment</strong></li>
+        <li id="confirm"><strong>Finish</strong></li>
+    </ul>
+    <fieldset>
+    <div class="form-card">
+        <h2 class="text-center" style="font-size:33px;">
+            <strong>Account Information</strong>
+            <hr class="col-lg-5 mb-4">
+        </h2>
         <div class="form-group">
             <div class="row">
-
                 <div class="col-lg-6">
-
                     <!--  ===============================================First Name input field ========================================-->
                     <div class="form-group">
                         <label for="firstName">First Name: </label>
-                        <input name="firstName"  type="text" id="firstName" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
-                        <div class="col-sm-5 messages"></div>
-<!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid First Name</div>-->
-                    </div>
+                        <input name="firstName"  type="text"  oninput="this.className = ''" id="firstName" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
+                        <div class="col-sm-5 messages"></div></div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="lastName">Last Name: </label>
-                        <input name="lastName"   id="lastName" type="text" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
+                        <input name="lastName"    oninput="this.className = ''"id="lastName" type="text" data-parsley-length="[4, 20]" data-parsley-group="block-1" class="form-control mb-2 form-control-lg"  required />
                         <div class="col-sm-5 messages"></div>
-<!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Last Name</div>-->
-
                     </div>
                 </div>
             </div>
-
-
         <div class="form-group">
             <label for="username">Username: </label>
-            <input   name="username" id="username"  data-parsley-minlength="3" required  type="text" class="form-control mb-2 form-control-lg" autofocus />
+            <input   name="username" id="username"  oninput="this.className = ''" data-parsley-minlength="3" required  type="text" class="form-control mb-2 form-control-lg" autofocus />
             <div class="col-sm-5 messages"></div>
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid username</div>-->
         </div>
         <!--  ===============================================Email field ========================================-->
         <div class="form-group">
             <label for="email">Email: </label>
-            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-parsley-trigger="change"  data-parsley-type="email" required=""  name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Email</div>-->
-            <div class="col-sm-5 messages"></div>
+            <input  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  oninput="this.className = ''" data-parsley-trigger="change"  data-parsley-type="email" required=""  name="email" id="email" type="text" class="form-control mb-2 form-control-lg"  />
+             <div class="col-sm-5 messages"></div>
         </div>
-                <!--  ===============================================Password input field ========================================-->
-                <div class="form-group">
-                    <div class="form-group">
-                        <label for="password">Password: </label>
-                        <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$" data-parsley-minlength="6"  data-parsley-maxlength="20"   name="password" id="password" type="password" class="form-control mb-2 form-control-lg" required />
-<!--                        <div  class=" alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Password</div>-->
-                        <div class="col-sm-5 messages"></div>
-                    </div>
-                </div>
-
+            <!--  ===============================================Password input field ========================================-->
+            <div class="form-group">
+                <label for="password">Password: </label>
+                <input  pattern="^((?!.*[^a-zA-Z\d])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{5,20})$"  oninput="this.className = ''" data-parsley-minlength="6"  data-parsley-maxlength="20"   name="password" id="password" type="password" class="form-control mb-2 form-control-lg" required /><div class="col-sm-5 messages"></div>
+            </div>
         </div>
+    </div>
+        <input type="button" name="next" class="next action-button" value="Next Step" />
+    </fieldset>
 
-            <hr class="mt-2">
-<div class="second">
+    <fieldset>
+    <div class="form-card">
         <h2 class="text-center" style="font-size:33px;">
             <strong>Basic Information</strong>
             <hr class="col-lg-5 mb-4">
@@ -95,28 +104,21 @@
                     <option th:value="${i}" th:text="${i}"></option>
                 </th:block>
             </select>
-
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.age')}" th:errors="*{aboutMe.age}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Age</div>-->
         </div>
         <div class="form-group">
             <label for="liveIn">Which city do you live ??</label>
-            <input type="text" name="liveIn" id="liveIn" data-parsley-length="[4, 20]"  class="form-control" required>
-
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.liveIn')}" th:errors="*{aboutMe.liveIn}"  role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Live In</div>-->
-
+            <input type="text" name="liveIn" id="liveIn" data-parsley-length="[4, 20]" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="gender">What is your Gender ? </label>
-            <select class="form-control" name="gender"  required id="gender">
+            <select class="form-control" name="gender"   oninput="this.className = ''" required id="gender">
                 <option th:value="Male" value="Male">Male</option>
                 <option th:value="Female" value="Female">Female</option>
             </select>
-
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.gender')}" th:errors="*{aboutMe.gender}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Genders</div>-->
         </div>
         <div class="form-group">
             <label for="education">What is your Education Level?</label>
-            <select class="form-control" name="education" required id="education">
+            <select class="form-control" name="education"   oninput="this.className = ''"required id="education">
                 <option value="" selected ></option>
                 <option value="High School">High School</option>
                 <option value="College">College</option>
@@ -386,9 +388,13 @@
             <label for="bio">Bio</label>
             <textarea class="form-control"  name="bio" required id="bio" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="255" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold="10"> </textarea>
             <div class="col-sm-5 messages"></div>
-<!--            <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.bio')}" th:errors="*{aboutMe.bio}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Bio</div>-->
         </div>
+</div>
+        <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
+    </fieldset>
 
+ <fieldset>
+<div class="form-card">
         <!-- =============================Appearance ===========================================-->
         <h2 class="text-center" style="font-size:33px;">
             <strong>Your Appearance</strong>
@@ -404,9 +410,7 @@
                     <option value="Muscular">Muscular</option>
                     <option value="Slim">Slim</option>
                 </select>
-                <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.bodyType')}" th:errors="*{aboutMe.bodyType}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Body Type</div>-->
-            </div>
+                <div class="col-sm-5 messages"></div></div>
             <div class="form-group">
                 <label for="height">What is your height ?</label>
                 <select class="form-control autofill" required name="height" id="height" tabindex="2">
@@ -471,9 +475,7 @@
                     <option value="236">7'9"</option>
                     <option value="238">7'10"</option>
                     <option value="241">7'11"</option>
-                </select>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.height')}" th:errors="*{aboutMe.height}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Height</div>-->
-            </div>
+                </select></div>
             <div class="form-group">
                 <label for="eye">What is your eye colour ?</label>
                 <select class="form-control autofill" required  name="eyes" tabindex="2" id="eye">
@@ -485,13 +487,11 @@
                     <option th:value="'hazel'" value="hazel">Hazel</option>
                 </select>
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.eyes')}" th:errors="*{aboutMe.eyes}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Eye Color</div>-->
-
             </div>
             <div class="form-group">
                 <label for="hair">What is your hair color?</label>
                 <select class="form-control autofill"  required name="hair" id="hair" tabindex="2">
-                    <option   value="" selected></option>
+                    <option value="" selected></option>
                     <option value="black">Black</option>
                     <option value="blond">Blond</option>
                     <option value="brown">Brown</option>
@@ -501,8 +501,6 @@
                     <option value="bal">Bald</option>
                 </select>
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.hair')}" th:errors="*{aboutMe.hair}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Height</div>-->
-
             </div>
 
         <h2 class="text-center " style="font-size:33px;">
@@ -511,7 +509,7 @@
         </h2>
             <div class="form-group">
                 <label for="languages">Which Language do you know?</label>
-                <select class="form-control" required  name="languages" id="languages">
+                <select class="form-control" required   name="languages" id="languages">
                     <option value="" selected></option>
                     <option value="Afrikaans">Afrikaans</option>
                     <option value="Albanian">Albanian</option>
@@ -586,9 +584,6 @@
                     <option value="Welsh">Welsh</option>
                     <option value="Xhosa">Xhosa</option>
                 </select>
-<!--                <div  class="alert alert-danger" th:if="${#fields.hasErrors('aboutMe.languages')}" th:errors="*{aboutMe.languages}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Height</div>-->
-
-
             </div>
             <div class="form-group">
                 <label for="relationship">What is your relationship Status?</label>
@@ -599,9 +594,6 @@
                     <option value="Separated">Separated</option>
                     <option value="Divorced">Divorced</option>
                     <option value="Widowed">Widowed</option>
-
-<!--                    <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.relationship')}" th:errors="*{aboutMe.relationship}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Height</div>-->
-
                 </select>
                 <div class="col-sm-5 messages"></div>
             </div>
@@ -609,8 +601,6 @@
                 <label for="known">Known</label>
                 <input type="text" name="known" required id="known"  class="form-control">
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.known')}" th:errors="*{aboutMe.known}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Known</div>-->
-
             </div>
             <div class="form-group">
                 <label for="workAs">What is your Occupation ?</label>
@@ -650,15 +640,11 @@
                     <option value="Unemployed">Unemployed</option>
                     <option value="Other">Other</option>
                 </select>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.workAs')}" th:errors="*{aboutMe.workAs}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Height</div>-->
-
-
             </div>
             <div class="form-group">
                 <label for="lookingFor" >Looking For?</label>
                 <textarea class="form-control" required name="lookingFor" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold="10" id="lookingFor" minlength="" maxlength="255" rows="5"   selected></textarea>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.lookingFor')}" th:errors="*{aboutMe.lookingFor}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Looking For</div>-->
-            </div>
+             </div>
             <div class="form-group">
                 <label for="haveKids">Do you have kids?</label>
                 <select class="form-control" required  name="haveKids" id="haveKids">
@@ -669,8 +655,6 @@
                     <option value="I Want some">I Want some</option>
                 </select>
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.haveKids')}" th:errors="*{aboutMe.haveKids}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Kids</div>-->
-
             </div>
             <div class="form-group">
                 <label for="smoke">Do you smoke ?</label>
@@ -682,9 +666,6 @@
 
                 </select>
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.smoke')}" th:errors="*{aboutMe.smoke}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Smoke</div>-->
-
-
             </div>
             <div class="form-group">
                 <label for="drink">Do you Drink ?</label>
@@ -695,16 +676,30 @@
                     <option value="Regularly">Regularly</option>
                 </select>
                 <div class="col-sm-5 messages"></div>
-<!--                <div  class=" alert alert-danger" th:if="${#fields.hasErrors('aboutMe.drink')}" th:errors="*{aboutMe.drink}"   role="alert" ><span class="glyphicon glyphicon-remove" ></span>Invalid Drinks</div>-->
-
-            </div>
-</div>
+        </div>
+    </div>
         <button class="btn btn-block btn-lg btn-success form-control-lg form-control mb-5 mt-5" type="submit">Sign Up</button>
+                <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
+            </fieldset>
+
+    <fieldset>
+        <div class="form-card">
+            <h2 class="fs-title text-center">Success !</h2> <br><br>
+            <div class="row justify-content-center">
+                <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
+            </div> <br><br>
+            <div class="row justify-content-center">
+                <div class="col-7 text-center">
+                    <h5>You Have Successfully Signed Up</h5>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
     </form>
-
-
-
 </div>
+
+        </div></div></div>
 
         <!--  =============================================== Form submit button  field ========================================-->
 
@@ -712,35 +707,84 @@
 
 <footer th:insert="footer.html :: footer"></footer>
 
+
+
 </body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
 
-    $(function () {
-        Parsley.addValidator('checkChildren', {
-            messages: {en: 'You must correctly fill at least one of these blocks!'},
-            requirementType: 'integer',
-            validate: function(_value, requirement, instance) {
-                for(var i = 1; i <= requirement; i++)
-                    if (instance.parent.isValid({group: 'block-' + i, force: true}))
-                        return true; // One section is filled, this check is valid
-                return false; // No section is filled, this validation fails
-            }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $(".next").click(function(){
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+//Add Class Active
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+//show the next fieldset
+            next_fs.show();
+//hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now) {
+// for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({'opacity': opacity});
+                },
+                duration: 600
+            });
         });
 
-        Parsley.on('form:submit', function() {
-            alert("The form would be submitted at this point. " +
-                "For this demo, we interrupt the processing.");
-            return false; // Don't submit for this demo
+        $(".previous").click(function(){
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+//Remove class active
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+//show the previous fieldset
+            previous_fs.show();
+
+//hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now) {
+// for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({'opacity': opacity});
+                },
+                duration: 600
+            });
         });
 
-        $('.demo-form').parsley({
-            inputs: Parsley.options.inputs + ',[data-parsley-check-children]'
+        $('.radio-group .radio').click(function(){
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
         });
+
+        $(".submit").click(function(){
+            return false;
+        })
+
     });
+
 </script>
 </html>

@@ -53,6 +53,7 @@ public class AboutMe {
     @NotNull(message = "Age cannot be empty")
     private int age;
     @NotNull(message = "Bio cannot be empty")
+    @Lob
     private String bio;
     @Lob
     @NotNull(message = "Interests cannot be empty")

@@ -8,6 +8,10 @@ $(document).ready(function() {
 
     });
 
+
+
+
+
 var formPhoto = $('#form-photo-delete');
 formPhoto.submit(function (e) {
     console.log(formPhoto.attr('action'));

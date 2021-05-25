@@ -30,10 +30,8 @@ public interface NotificationRepository extends JpaRepository<Notification,Integ
 
      @Transactional
      @Modifying
-     @Query(value="UPDATE Notification n set n.status=true where n.status=false and n.userReceiver=:user ")
-     void readNotifications( @Param("user") User user);
+     @Query(value="UPDATE Notification n set n.status=true where n.id = :id")
+     void readNotifications(@Param("id") int email);
 
- 
-
-     int countNotificationsByUserReceiver(@Param("userReceiver") String userReceiver);
+     int countNotificationsByUserReceiver(@Param("id") String id);
 }

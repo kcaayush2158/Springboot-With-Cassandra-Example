@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     function loadUserProfile(limit, start) {
 
-        jQuery.ajax({
+        $.ajax({
             url: '/api/users/profile',
             dataType: 'text',
             method: 'get',
@@ -40,7 +40,7 @@ $(document).ready(function () {
                 var skeleton = "";
                 $('#shimmer-photo').hide();
                 $('.ajax-loader').css("visibility", "hidden");
-                if (data === '') {
+                if (data === null) {
                     $('#load_data_message').html("<div class='container mt-5 mb-5 text-center ' > <h5>No Data Found</h5><div>");
                     action = 'active';
                 } else {
@@ -101,7 +101,7 @@ $(document).ready(function () {
 </div> `
 
                     $('#load_data_message').html(skeleton);
-                    $('.users').html(data);
+                    $('.users').append(data);
                     action = 'inactive';
                 }
 

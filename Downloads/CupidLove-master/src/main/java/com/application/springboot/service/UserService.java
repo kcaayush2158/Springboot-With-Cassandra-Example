@@ -108,4 +108,6 @@ public class UserService {
     public User fetchUserEmailAndPassword(String email, String password) {
         return userRepository.findByEmailAndPassword(email,password);
     }
+
+
 }

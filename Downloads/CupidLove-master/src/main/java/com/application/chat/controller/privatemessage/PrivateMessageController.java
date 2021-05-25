@@ -6,6 +6,8 @@ import com.application.chat.service.PrivateMessageService;
 import com.application.springboot.model.User;
 import com.application.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -104,9 +106,9 @@ public int countUnreadMessages(Principal principal, @PathVariable("userId") int 
 
     }
     @GetMapping("/direct/u/unreadMessage")
-    public int getUnreadMessages(Principal principal){
+    public @ResponseBody  ResponseEntity<Integer> getUnreadMessages(@AuthenticationPrincipal  Principal principal){
         User user = userService.findExistingEmail(principal.getName());
-        return privateMessageService.getUnreadMessages(user.getEmail(),false);
+        return ResponseEntity.ok().body(privateMessageService.getUnreadMessages(user.getEmail(),false));
     }
 
 

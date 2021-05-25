@@ -7,7 +7,8 @@ import com.application.springboot.service.LikeService.LikesService;
 import com.application.springboot.service.NotificationService;
 import com.application.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.Like;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LikeRestApiController {
 
     @Autowired
@@ -58,50 +60,75 @@ public class LikeRestApiController {
     }
 
     @GetMapping("/likes/all")
-    public List<Likes> getAllLikedUsers(Principal principal) {
-        User loggedInUsers = userService.findExistingEmail(principal.getName());
+    public ResponseEntity<List<Likes>> getAllLikedUsers(@RequestParam(value = "email", required = false)String email, Principal principal) {
+        User loggedInUsers;
+        if(email !=null){
+            loggedInUsers = userService.findExistingEmail(email);
+        }else{
+          loggedInUsers = userService.findExistingEmail(principal.getName());
+        }
 
-        return likesService.getLikedUsers(loggedInUsers);
+        return ResponseEntity.ok().body(likesService.getLikedUsers(loggedInUsers));
     }
 
     @GetMapping("/likes/u/all")
-    public List<Likes> getAllLikedByPrincipal(Principal principal) {
-        User loggedInUsers = userService.findExistingEmail(principal.getName());
-        return likesService.getYouLiked(loggedInUsers);
+    public ResponseEntity<List<Likes>> getAllLikedByPrincipal(@RequestParam(value = "email" , required = false)String email, Principal principal) {
+        User loggedInUsers ;
+        if(email!=null){
+           loggedInUsers = userService.findExistingEmail(email);
+        }else{
+            loggedInUsers = userService.findExistingEmail(principal.getName());
+        }
+        return ResponseEntity.ok().body(likesService.getYouLiked(loggedInUsers));
     }
 
     @GetMapping("/likes/users/count")
-    public int countTotalVisitedUsers(Principal principal) {
-        User user = userService.findExistingEmail(principal.getName());
+    public ResponseEntity<Integer> countTotalVisitedUsers(@RequestParam(value = "email" , required = false)String email,Principal principal) {
+        User user;
+        if(email!=null){
+            user = userService.findExistingEmail(email);
+        }else{
+            user = userService.findExistingEmail(principal.getName());
+        }
 
-        return likesService.countTotalLikes(user);
+        return ResponseEntity.ok().body(likesService.countTotalLikes(user));
     }
 
     @GetMapping("/likes/you-liked/count")
-    public int countTotalUserLikesBy(Principal principal) {
-        User user = userService.findExistingEmail(principal.getName());
-        return likesService.countTotalUserLikesBy(user);
+    public ResponseEntity<Integer> countTotalUserLikesBy(@RequestParam(value = "email" , required = false)String email,Principal principal) {
+        User user;
+        if(email!=null){
+            user = userService.findExistingEmail(email);
+        }else{
+            user = userService.findExistingEmail(principal.getName());
+        }
+        return  new ResponseEntity<Integer>( likesService.countTotalUserLikesBy(user),HttpStatus.OK);
     }
 
     @PostMapping("/likes/{id}/update")
-    public Likes updatesLikeStatus(@RequestBody Likes likes, @PathVariable("id") int id, Principal principal) {
-        User user = userService.findExistingEmail(principal.getName());
+    public ResponseEntity<Likes> updatesLikeStatus(@RequestParam(value = "email" , required = false)String email,@RequestBody Likes likes, @PathVariable("id") int id, Principal principal) {
+        User user;
+        if(email!=null){
+            user = userService.findExistingEmail(email);
+        }else{
+            user = userService.findExistingEmail(principal.getName());
+        }
         likes.setLikedBy(user);
         likes.setLikedTo(likes.getLikedTo());
         if (likes.isStatus()) {
             likes.setStatus(false);
 
-            return likesService.updateLikes(likes.getId(), false);
+            return ResponseEntity.ok().body(likesService.updateLikes(likes.getId(), false));
         } else {
             likes.setStatus(true);
         }
-        return likesService.updateLikes(likes.getId(), true);
+        return ResponseEntity.ok().body(likesService.updateLikes(likes.getId(), true));
     }
 
 
     @PostMapping("/likes/{id}/delete")
-    public int deleteLike(@RequestBody @PathVariable("id") int id) {
-        return likesService.deleteLikes(id);
+    public ResponseEntity<Integer> deleteLike(@RequestBody @PathVariable("id") int id) {
+        return ResponseEntity.ok().body(likesService.deleteLikes(id));
     }
 
 

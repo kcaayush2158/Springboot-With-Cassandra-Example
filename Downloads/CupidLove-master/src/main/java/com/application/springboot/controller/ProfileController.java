@@ -1,3 +1,4 @@
+
 package com.application.springboot.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -14,11 +15,10 @@ import com.application.springboot.service.LikeService.LikesService;
 import com.application.springboot.service.photo.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.Date;
@@ -37,6 +37,7 @@ public class ProfileController {
     private UserService userService;
     @Autowired
     private AboutMeRepository aboutMeRepository;
+
 
     @Autowired
     private SettingService settingService;
@@ -59,33 +60,34 @@ public class ProfileController {
     private VisitService visitService;
     @Autowired
     private LikesService likesService;
+
     /*
     Working correctly ,
     Repo:-
     * Page userprofile page
     * */
     @GetMapping(value = "/user/profile/{username}")
-    public ModelAndView showUserProfiles(@PathVariable("username") String username, Model model,  Principal principal) {
-        ModelAndView modelAndView = new ModelAndView("userprofile");
+    public String showUserProfiles(@PathVariable("username") String username, Model model, Principal principal) {
         User user = userService.getAllWithUsername(username);
 
         User currentloginInformation = userService.findExistingEmail(principal.getName());
 
         //gets the total no of photos
-        model.addAttribute("totalPhoto",photoService.countAllPhotos(user));
-        model.addAttribute("totalLikes",likesService.countTotalLikes(currentloginInformation,user));
+        model.addAttribute("totalPhoto", photoService.countAllPhotos(user));
+        model.addAttribute("totalLikes", likesService.countTotalLikes(user));
+
         // save the notification if the principal visit other profiles
         Notification notification = new Notification();
         notification.setUserSender(principal.getName());
         notification.setUserReceiver(user.getEmail());
         notification.setDatetime_added(new Date());
         notification.setUser(currentloginInformation);
-        model.addAttribute("userSender",currentloginInformation);
+        model.addAttribute("userSender", currentloginInformation);
 
         //gets the logged in user photo
-        model.addAttribute("userPhoto",photoService.showAllPhotos(user));
+        model.addAttribute("userPhoto", photoService.showAllPhotos(user));
 
-        User visitedUsers =  userService.findByUsername(username);
+        User visitedUsers = userService.findByUsername(username);
 
 
         Visits visits = new Visits();
@@ -94,10 +96,10 @@ public class ProfileController {
         visits.setReceivedUser(currentloginInformation);
         visitService.saveVisits(visits);
 
-        notification.setMessage(currentloginInformation.getUsername() + " "+ " has visited your profile");
+        notification.setMessage(currentloginInformation.getUsername() + " " + " has visited your profile");
 
         //gets other similar users by its genders
-        model.addAttribute("othersUsers",userService.findOthersSimilarUsers(user.getAboutMe().getGender()));
+        model.addAttribute("othersUsers", userService.findOthersSimilarUsers(user.getAboutMe().getGender()));
 
 
         if (!user.getEmail().equals(currentloginInformation.getEmail())) {
@@ -109,8 +111,21 @@ public class ProfileController {
 
         model.addAttribute("users", result);
         model.addAttribute("aboutme", user);
-        return modelAndView;
+        return "userprofile";
     }
+
+    @GetMapping(value = "/api/user/{username}")
+    public ResponseEntity<User> showUserProfiles(@PathVariable("username") String username) {
+        User user = userService.getAllWithUsername(username);
+        return ResponseEntity.ok(user);
+    }
+
+        @GetMapping(value = "/api/principal/user/photo")
+        public ResponseEntity<List<Photos>> getAllPhotos(@RequestParam("email") String email ){
+            User user  = userService.findExistingEmail(email);
+            return ResponseEntity.ok(photoService.showAllPhotos(user));
+        }
+
 
 //    @PostMapping("/user/profile/upload/photo")
 //    public String uploadPhoto(@RequestPart(value = "file") MultipartFile multipartFile, Principal principal,Model model,Photos photos){
@@ -118,7 +133,6 @@ public class ProfileController {
 //         photos.setPhotoUrl(multipartFile.getName() );
 //         return "redirect:/profile";
 //    }
-
 
 
     /* 3.
@@ -130,11 +144,12 @@ public class ProfileController {
     @GetMapping("/profile")
     public String myProfile(Model model, Principal principal) {
         User existingUser = userService.findExistingEmail(principal.getName());
-        model.addAttribute("totalPhotos",photoService.countAllPhotos(existingUser));
-        model.addAttribute("userPhoto",photoService.showAllPhotos(existingUser)) ;
+        model.addAttribute("totalPhotos", photoService.countAllPhotos(existingUser));
+        model.addAttribute("userPhoto", photoService.showAllPhotos(existingUser));
         model.addAttribute("users", existingUser);
-        model.addAttribute("totalViews",notificationService.getTotalProfileViews(principal.getName()));
-    return "profile";
+        model.addAttribute("totalLikes", likesService.countTotalLikes(existingUser));
+        model.addAttribute("totalViews", likesService.countTotalUserLikesBy(existingUser));
+        return "profile";
     }
 
 
@@ -197,49 +212,44 @@ public class ProfileController {
     //search the user in the nav
     // @param
     @GetMapping("/search/user")
-    public String searchUser(@RequestParam("fromAge") int fromAge, @RequestParam("toAge") int toAge, @RequestParam("gender") String gender,@RequestParam("country") String country,Model model,Principal principal) {
-        List<User> results = userService.searchUserProfile(gender,fromAge,toAge,country );
-        int totalSearchedUser = userService.countUserProfile(gender,fromAge,toAge,country);
+    public String searchUser(@RequestParam("fromAge") int fromAge, @RequestParam("toAge") int toAge, @RequestParam("gender") String gender, @RequestParam("country") String country, Model model, Principal principal) {
+        List<User> results = userService.searchUserProfile(gender, fromAge, toAge, country);
+        int totalSearchedUser = userService.countUserProfile(gender, fromAge, toAge, country);
         int totalUser = userService.countTotalUser(principal.getName());
-     for (User re: results){
-         model.addAttribute("totalSearchedUser",totalSearchedUser);
-         model.addAttribute("message", "Search Results");
-         model.addAttribute("users", results);
-         model.addAttribute("totalUsers",totalUser);
-         model.addAttribute("message", "Search Results , "+ totalSearchedUser);
-         return "search";
-     }
+        for (User re : results) {
+            model.addAttribute("totalSearchedUser", totalSearchedUser);
+            model.addAttribute("message", "Search Results");
+            model.addAttribute("users", results);
+            model.addAttribute("totalUsers", totalUser);
+            model.addAttribute("message", "Search Results , " + totalSearchedUser);
+            return "search";
+        }
         model.addAttribute("result", "User doesn't found");
-        model.addAttribute("message", "Search Results , "+ totalSearchedUser);
+        model.addAttribute("message", "Search Results , " + totalSearchedUser);
         return "search";
     }
 
 
-
     @GetMapping("/list/bucket")
     public @ResponseBody
-    String listAllBucketFiles(Model model, Principal principal ){
+    String listAllBucketFiles(Model model, Principal principal) {
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
                 .withBucketName(bucketName)
-                .withPrefix(principal.getName()+"/").withDelimiter("/");
+                .withPrefix(principal.getName() + "/").withDelimiter("/");
 
         ObjectListing objects = s3client.listObjects(listObjectsRequest);
 
-            List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
 
-            for (S3ObjectSummary item : summaries) {
-                System.out.println(" -> " + item.getKey() + "  " + "(size = " + item.getSize()/1024 + " KB)");
+        for (S3ObjectSummary item : summaries) {
+            System.out.println(" -> " + item.getKey() + "  " + "(size = " + item.getSize() / 1024 + " KB)");
 
-            }
+        }
 //                System.out.println("https://user-photo-videos.s3.amazonaws.com/" + item.getKey()+ principal.getName());
 //                model.addAttribute("photos","https://user-photo-videos.s3.amazonaws.com/" + item.getKey()+ principal.getName());
         return "";
     }
 
 
-
-
-
-
-
 }
+

@@ -4,8 +4,8 @@ import com.application.chat.model.PublicChatMessage;
 import com.application.chat.service.PublicChatroomService;
 import com.application.springboot.model.User;
 import com.application.springboot.service.UserService;
-import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
@@ -47,6 +47,12 @@ public class PublicChatRoomAPI {
 
         return  publicChatroomService.getAllPublicChats(chatroomId);
     }
+
+    @GetMapping("/user/all")
+    public ResponseEntity<List<User>> getAllUsers(){
+            return ResponseEntity.ok(userService.listUser());
+    }
+
 
 
 }

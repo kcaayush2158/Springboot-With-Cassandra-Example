@@ -5,6 +5,7 @@ import com.application.springboot.model.Visits;
 import com.application.springboot.service.UserService;
 import com.application.springboot.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,16 +20,26 @@ public class VisitsController {
     private UserService userService;
 
     @GetMapping("/visits")
-    public List<Visits> getVisits(Principal principal){
-        User loggedInUsers = userService.findExistingEmail(principal.getName());
-        return  visitService.getUsers(loggedInUsers);
+    public ResponseEntity<List<Visits>> getVisits(@RequestParam(value = "email" ,required = false)String email, Principal principal){
+        User loggedInUsers ;
+        if(email !=null){
+            loggedInUsers = userService.findExistingEmail(email);
+        }else {
+           loggedInUsers = userService.findExistingEmail(principal.getName());
+        }
+        return  ResponseEntity.ok().body(visitService.getUsers(loggedInUsers));
     }
 
 
     @GetMapping("/visits/users/count")
-    public  int countTotalVisitedUsers(Principal principal){
-        User user = userService.findExistingEmail(principal.getName());
-        return visitService.countTotalVisitedUsers(user);
+    public ResponseEntity<Integer> countTotalVisitedUsers(@RequestParam(value = "email" ,required = false)String email,Principal principal){
+        User user ;
+        if(email !=null){
+            user = userService.findExistingEmail(email);
+        }else {
+            user = userService.findExistingEmail(principal.getName());
+        }
+        return ResponseEntity.ok().body(visitService.countTotalVisitedUsers(user));
     }
 
 

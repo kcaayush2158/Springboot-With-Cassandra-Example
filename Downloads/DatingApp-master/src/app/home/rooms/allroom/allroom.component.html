@@ -1,0 +1,49 @@
+
+<div class="container-fluid offset-md-1">
+  <div class="col-md-12">
+    <div class="row">
+      <span *ngFor="let room of allRooms  ">
+        <div class="col-md-12">
+          <div class="card mb-2 mr-3 ml-2 mt-5 search-results" id="custom-card-design"
+          infiniteScroll
+          [infiniteScrollDistance]="2"
+          [infiniteScrollThrottle]="10"
+
+          >
+            <div class="card-body">
+              <h5 class="card-title text-center mb-2">{{ room.chatRoomName }}</h5>
+              <p class="mt-4 mb-5" id="chatDescription">{{ room.chatRoomDescription }}</p>
+            <ng-container *ngIf=" room.type == 'PUBLIC'; else elseTemplate">
+              <form action="/chatroom/public/{{ room.chatRoomId }}" method="GET">
+                <button class="btn btn-block mt- mb-2 btn-join-room-public" type="submit">
+                  <b> <i class="fa fa-plus-circle" aria-hidden="true"></i> Join Room</b>
+                </button>
+                </form>
+             </ng-container>
+             <ng-template #elseTemplate>
+              <form action="/chatroom/public/{{ room.chatRoomId }}" method="GET">
+                <button class="btn btn-block mt-5 mb-2 btn-join-room-private"  type="submit">
+                  <b> <i class="fa fa-plus-circle" aria-hidden="true"></i> Join Room</b>
+                </button>
+                </form>
+             </ng-template>
+
+
+
+            </div>
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+
+  {{search}}
+  <div class="row pb-5">
+    <div class="col-md-12 p-5">
+      <ngx-spinner  size="medium" color="#00C9A7" type="ball-clip-rotate">
+        <p style="font-size: 20px; color: white">Loading...</p>
+      </ngx-spinner>
+    </div>
+  </div>
+
+</div>

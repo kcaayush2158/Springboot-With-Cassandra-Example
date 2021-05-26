@@ -139,82 +139,83 @@
                                   </button>
                                 </div>
                                 <div class="modal-body">
-                                 
-                                    <form>
-                                        <label class="topicName">Topic Name</label>
-                                        <select class="form-control" id="topicName" [(ngModel)]="topicName"  name="topicName" >
-
-                                                <option>ABOUT ME</option>
-                                                <option>ASPIRATIONS</option>
-                                              
-                                                <option>TALENTS</option>
-                                                <option>NEEDS</option>
-                                                <option>HOBBIES</option>
-                                                <option>MOMENTS</option>
+                                    {{ formTopic.value |json}}
+                                <form [formGroup]="formTopic" (ngSubmit)="saveTopic()" >
+                                    <div class="form-group">
+                                        <label id="topicName">Topic Name</label>
+                                        <select formGroupName="topicName" [(ngModel)]="topic.topicName" class="form-control" id="topicName"  name="topicName" >
+                                                
+                                                <option value="ABOUT ME">ABOUT ME</option>
+                                                <option value="ASPIRATIONS">ASPIRATIONS</option>                   
+                                                <option value="TALENTS">TALENTS</option>
+                                                <option value="NEEDS"> NEEDS</option>
+                                                <option value="HOBBIES">HOBBIES</option>
+                                                <option value="MOMENTS">MOMENTS</option>
                                         </select>
-
+                                    </div>
+                                        <div class="form-group">
                                             <label class="topicQuestion">Topic Name</label>
-                                            <select class="form-control" id="topicQuestion"  name="topicQuestion" >
-                                            <ng-container *ngIf="topicName === 'ABOUT ME';else second">
-                                                <option class="">My self-summary</option>
-                                                <option class="">Me, a Haiku</option>
-                                                <option class="">Favorite thing about the place I live</option>
-                                                <option class="">Most people that know me would say I'm</option>
-                                                <option class="">Favorite memory from my childhood</option>
+                                <select   formGroupName="topicQuestion"  class="form-control" id="topicQuestion"  name="topicQuestion" >
+                                            <ng-container *ngIf="topic.topicName === 'ABOUT ME';else ASPIRATIONS">
+                                                <option value="My self-summary">My self-summary</option>
+                                                <option value="Me, a Haiku">Me, a Haiku</option>
+                                                <option value="Favorite thing about the place I live">Favorite thing about the place I live</option>
+                                                <option value="Most people that know me would say I'm">Most people that know me would say I'm</option>
+                                                <option value="Favorite memory from my childhood">Favorite memory from my childhood</option>
                                             </ng-container>
                                            
-                                            <ng-template #second>
-                                                <ng-container *ngIf="topicName === 'ASPIRATIONS';else third">
-                                                    <option>Current goal</option>
-                                                    <option>One day, I would like to</option>
-                                                    <option>I'd like to be known for my</option>
-                                                    <option>If money were no concern, this is what I would be doing</option>
-                                                    <option>My dream job is</option>
+                                            <ng-template #ASPIRATIONS>
+                                                <ng-container *ngIf="topicName === 'ASPIRATIONS';else HOBBIES">
+                                                    <option value="Current goal">Current goal</option>
+                                                    <option value="One day, I would like to"> One day, I would like to</option>
+                                                    <option value="I'd like to be known for my">I'd like to be known for my</option>
+                                                    <option value="If money were no concern, this is what I would be doing">If money were no concern, this is what I would be doing</option>
+                                                    <option value="My dream job is">My dream job is</option>
                                                 </ng-container>
                                             </ng-template>
-                                            <ng-template #third>
+                                            <ng-template #HOBBIES>
                                                 <ng-container *ngIf="topicName === 'HOBBIES';else fourth">
-                                                    <option>II like to take pictures of</option>
-                                                    <option>My favorite conspiracy theory</option>
-                                                    <option>Last video I watched on YouTube</option>
-                                                    <option>The last show I binged</option>
-                                                    <option>I should spend less time</option>
+                                                    <option value="I like to take pictures of">I like to take pictures of</option>
+                                                    <option value="My favorite conspiracy theory">My favorite conspiracy theory</option>
+                                                    <option value="Last video I watched on YouTube">Last video I watched on YouTube</option>
+                                                    <option value="The last show I binged">The last show I binged</option>
+                                                    <option value="">I should spend less time</option>
                                                 </ng-container>
                                             </ng-template>
                                       <ng-template #fourth>
                                         <ng-container *ngIf="topicName === 'TALENTS';else fifth">
-                                            <option> I'm really good at</option>
-                                            <option>I could probably beat you at</option>
-                                            <option>My patronus</option>
-                                            <option>I want to be better at</option>
-                                            <option>My worst quality</option>
+                                            <option value="I'm really good at"> I'm really good at</option>
+                                            <option value="I could probably beat you at">I could probably beat you at</option>
+                                            <option value="My patronus">My patronus</option>
+                                            <option value="I want to be better at">I want to be better at</option>
+                                            <option value="My worst quality">My worst quality</option>
                                         </ng-container>
                                     </ng-template>
                                       <ng-template #fifth>
                                         <ng-container *ngIf="topicName === 'NEEDS';else moments">
-                                            <option>Six things I could never do without</option>
-                                            <option>If I could only eat one food for the rest of time it would be</option>
-                                            <option>This item makes me feel at home</option>
-                                            <option>My partner should be</option>
-                                            <option>I couldn't function without these apps</option>
+                                            <option value="Six things I could never do without">Six things I could never do without</option>
+                                            <option value="If I could only eat one food for the rest of time it would be">If I could only eat one food for the rest of time it would be</option>
+                                            <option value="This item makes me feel at home">This item makes me feel at home</option>
+                                            <option value="My partner should be">My partner should be</option>
+                                            <option value="I couldn't function without these apps">I couldn't function without these apps</option>
                                         </ng-container>
                                       </ng-template>
                                       
                                       <ng-template #moments>
                                         <ng-container *ngIf="topicName === 'MOMENTS'">
-                                            <option>A perfect day</option>
-                                            <option>Best day of my life so far</option>
-                                            <option>Ideal weekend routine</option>
-                                            <option>When I die, I will</option>
-                                            <option>On a typical Wednesday I am</option>
+                                            <option value="A perfect day">A perfect day</option>
+                                            <option value="Best day of my life so far">Best day of my life so far</option>
+                                            <option value="Ideal weekend routine">Ideal weekend routine</option>
+                                            <option value="When I die, I will">When I die, I will</option>
+                                            <option value="On a typical Wednesday I am">On a typical Wednesday I am</option>
                                         </ng-container>
                                       </ng-template>
                                       
-                                        </select>
-                                           
+                                </select>
+                                    </div>
                                       <div class="form-group">
                                         <label  id="label-answer"> Answer</label>
-                                        <textarea name="topicAnswer" class="form-control" id="topicAnswer" cols="30" rows="10"></textarea>
+                                        <textarea name="topicAnswer" formGroupName="topicAnswer" class="form-control" id="topicAnswer" cols="30" rows="10"></textarea>
                                       </div>
                                      
                              </form>
@@ -223,7 +224,7 @@
                                
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                  <button type="button"  (click)="saveTopic()"class="btn btn-primary">Save changes</button>
                                 </div>
                               </div>
                             </div>

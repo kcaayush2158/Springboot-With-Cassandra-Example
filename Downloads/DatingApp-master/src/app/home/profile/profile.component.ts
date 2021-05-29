@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EventEmitter } from 'events';
+
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LikesComponent } from '../likes/likes.component';
-import { EventEmmitterService } from './event-emmitter.service';
 import { Topics } from './topics';
 
 @Component({
@@ -18,32 +19,25 @@ export class ProfileComponent implements OnInit {
   photoes:any =[];
   user;
   totalLikes;
+  topicQuestion='';
+  topicAnswer='';
 
-  formTopic:FormGroup;
+  @Input() formTopic:FormGroup;
+  @Output() formChange: EventEmitter = new EventEmitter()
 
-
-  topicName:string;
+  topicName='';
   topics:any=[];
-  topic = {topicAnswer:'',topicName:'',topicQuestion:''};
 
-  constructor(private formBuilder :FormBuilder,private http: HttpClient,private toastr :ToastrService, private spinner: NgxSpinnerService,private localStorage:LocalStorageService,private eventEmmitter :EventEmmitterService) { 
+  constructor(private formBuilder :FormBuilder,private http: HttpClient,private toastr :ToastrService, private spinner: NgxSpinnerService,private localStorage:LocalStorageService) { 
   }
+
+  
 
   get registerFormControl() {
     return this.formTopic.controls;
   }
 
-  get topicQuestion() {
-    return this.formTopic.get('topicQuestion');
-  }
-
-  get topicAnswer() {
-    return this.formTopic.get('topicAnswer');
-  }
-  get topicNames() {
-    return this.formTopic.get('topicName');
-  }
-
+ 
 
   customOptions: OwlOptions = {
     loop: true,
@@ -73,12 +67,14 @@ export class ProfileComponent implements OnInit {
     
  
   ngOnInit() {
-    
-    this.formTopic = this.formBuilder.group({
-    topicName: "",
-     topicQuestion : "",
-      topicAnswer:""
-    });
+    // this.formChange.emit(this.formTopic)
+
+
+    // this.formTopic = this.formBuilder.group({
+    //   topicName: ['', [Validators.required] ],
+    //   topicQuestion : ['', [Validators.required,]],
+    //   topicAnswer: ['', [Validators.required, Validators.minLength(100), Validators.maxLength(250)]],
+    // });
 
 
     this.user= this.localStorage.retrieve('user');
@@ -87,16 +83,24 @@ export class ProfileComponent implements OnInit {
     this.loadAuthenticatedUserPhotoes();
 
     
-    if(this.eventEmmitter.subsVar == undefined){
-      this.eventEmmitter.subsVar == this.eventEmmitter.countLikesFunction.subscribe((likes:any)=>{
-        console.log(likes);  
-        this.countLikes(likes);
+    // if(this.eventEmmitter.subsVar == undefined){
+    //   this.eventEmmitter.subsVar == this.eventEmmitter.countLikesFunction.subscribe((likes:any)=>{
+    //     console.log(likes);  
+    //     this.countLikes(likes);
     
-      })
-    }
+    //   })
+    // }
     
      
   }
+
+  // onChanges(): void {
+  //   console.log('MyForm > onChanges', this.formTopic.value)
+  //   this.formTopic.valueChanges.subscribe(value=>{
+  //     this.formChange.emit(this.formTopic)
+  //   })
+  // }
+
 countLikes(likes:any){
   this.totalLikes= likes;
   console.log(this.totalLikes);
@@ -124,7 +128,6 @@ deletePhoto(id:number){
 }
 
 loadTopic(){ 
-
   const user = this.localStorage.retrieve('user');
   this.http.get("http://localhost:8080/api/topic/all?id="+user.id,{responseType:'json'}).subscribe((data)=>{
     this.topics =data;
@@ -134,14 +137,21 @@ loadTopic(){
 
 saveTopic(){
   const user = this.localStorage.retrieve('user');
-  this.http.post('http://localhost:8080/api/topic/save?id='+user.id+'&topicName='+this.topic.topicName+'&topicQuestion='+this.topic.topicQuestion+'&topicAnswer='+this.topic.topicAnswer,{}).subscribe((data)=>{
-    if(data != 0){
-      this.toastr.success('success','Topic added');
-    }else{
-      this.toastr.error('error','Already existed try another one');
-    }
-  });
+  this.http.post('http://localhost:8080/api/topic/save?id='+user.id+'&topicName='+this.topicName+'&topicQuestion='+this.topicQuestion+'&topicAnswer='+this.topicAnswer,{}).subscribe((data)=>{
+  console.log(data); 
+  this.toastr.success('success','Topic added');
+  this.loadTopic();
 
+  }),(error)=>{  this.toastr.error('error','Topic Already existed');};
+
+
+}
+
+deleteTopic(id:number){
+  this.http.post("http://localhost:8080/api/topic/delete?id="+id,{}).subscribe((data)=>{
+    this.toastr.success('success','Topic deleted successfully');
+    this.loadTopic();
+  });
 
 }
 }

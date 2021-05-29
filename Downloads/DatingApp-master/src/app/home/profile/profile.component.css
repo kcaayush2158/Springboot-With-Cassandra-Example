@@ -53,12 +53,13 @@ label {
     height:300px;
 }
 #card-body-lookingfor{
-    height: 530px;
+    height: auto;
 
 }
 
 .bio{
-    font-family: 'Poppins', sans-serif; font-size: 20px
+
+    font-size: 20px
 }
 .image{
     height: 300px; width: 300px; object-fit: cover
@@ -68,7 +69,7 @@ label {
 
 }
 #card-body-interest{
-    height: 200px;
+    height: auto;
 
 }
 .modal-dialog{
@@ -117,6 +118,8 @@ label {
 .container-topic{
     cursor: pointer;
     padding: 20px 50px 20px 20px;
+   
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 8%);
     position: relative;
     font-size: 18px;
     background: transparent;
